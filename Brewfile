@@ -11,8 +11,10 @@ function install_cask() {
 	brew cask install $1;
 }
 
+# Pre-requisites
+install_brew cask;
+
 # General
-install_brew zsh;
 install_brew git;
 install_brew ruby;
 install_brew python;
@@ -27,3 +29,4 @@ install_cask google-chrome;
 install_cask slack;
 install_cask tower;
 install_cask iterm2;
+install_cask visual-studio-code;
