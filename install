@@ -2,8 +2,8 @@
 
 # Install Oh My ZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-cp -a ~/.dotfiles/zsh/custom ~/.oh-my-zsh/custom
-cp -a ~/.dotfiles/zsh/tools ~/.oh-my-zsh/tools
+cp -R ~/.dotfiles/zsh/custom ~/.oh-my-zsh
+cp -R ~/.dotfiles/zsh/tools ~/.oh-my-zsh
 exec zsh
 
 # Sym link dotfiles
