@@ -2,7 +2,6 @@
 
 # Install Oh My ZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-cp -R ./zsh/oh-my-zsh ~/.oh-my-zsh
 
 # Sym link dotfiles
 ln -sv “~/.dotfiles/zsh/.zshrc ~
