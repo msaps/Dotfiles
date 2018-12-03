@@ -6,7 +6,8 @@ homebrew:
 
 gems:
 	rbenv install 2.5.3
-	sudo gem install bundle
+	rbenv global 2.5.3
+	gem install bundler
 	bundle install
 
 core:
