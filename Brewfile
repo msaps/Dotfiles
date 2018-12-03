@@ -31,3 +31,4 @@ install_cask slack;
 install_cask tower;
 install_cask iterm2;
 install_cask visual-studio-code;
+install_cask sketch;
