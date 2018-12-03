@@ -89,4 +89,4 @@ alias tw="gittower ./"
 alias ddata="rm -r ~/Library/Developer/Xcode/DerivedData"
 
 . ~/.oh-my-zsh/tools/z.sh
-echo 'eval "$(rbenv init -)"'
+eval "$(rbenv init -)"

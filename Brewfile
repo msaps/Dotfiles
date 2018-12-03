@@ -16,8 +16,9 @@ install_brew cask;
 
 # General
 install_brew git;
-install_brew ruby;
+install_brew rbenv;
 install_brew python;
+install_brew rbenv;
 
 # iOS
 install_brew carthage;

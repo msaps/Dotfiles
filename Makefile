@@ -1,5 +1,8 @@
 
-all: homebrew gems system
+all: core homebrew gems
+
+core:
+	sh ./Corefile
 
 homebrew:
 	sh ./Brewfile
@@ -7,6 +10,3 @@ homebrew:
 gems:
 	sudo gem install bundle
 	bundle install
-
-system:
-	sh ./install
