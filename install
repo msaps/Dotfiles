@@ -4,6 +4,6 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # Sym link dotfiles
-ln -sv “~/.dotfiles/zsh/.zshrc ~
-ln -sv “~/.dotfiles/git/.gitconfig ~
-ln -sv “~/.dotfiles/git/.gitignore ~
+ln -sv ~/.dotfiles/zsh/.zshrc ~
+ln -sv ~/.dotfiles/git/.gitconfig ~
+ln -sv ~/.dotfiles/git/.gitignore ~
