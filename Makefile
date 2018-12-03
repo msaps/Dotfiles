@@ -1,5 +1,9 @@
 
-all: homebrew gems core
+all: core homebrew gems
+
+core:
+	git submodule update --init --recursive
+	sh ./Corefile
 
 homebrew:
 	sh ./Brewfile
@@ -9,6 +13,3 @@ gems:
 	rbenv global 2.5.3
 	gem install bundler
 	bundle install
-
-core:
-	sh ./Corefile

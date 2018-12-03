@@ -88,6 +88,8 @@ alias tower="gittower ./"
 alias tw="gittower ./"
 alias ddata="rm -r ~/Library/Developer/Xcode/DerivedData"
 
+source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 . ~/.oh-my-zsh/tools/z.sh
+
 export RBENV_ROOT=/usr/local/var/rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
