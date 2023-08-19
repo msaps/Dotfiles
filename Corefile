@@ -1,15 +1,19 @@
 #! bin/bash
 
 # Install Oh My ZSH
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 
 # ZSH plugins
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/agkozak/zsh-z $ZSH_CUSTOM/plugins/zsh-z
-
-exec zsh
 
 # Sym link dotfiles
-ln -sv ~/.dotfiles/zsh/.zshrc ~
+ln -sf ~/.dotfiles/zsh/.zshrc ~/.zshrc
+ln -sf ~/.dotfiles/zsh/.zshenv ~/.zshenv
 ln -sv ~/.dotfiles/git/.gitconfig ~
 ln -sv ~/.dotfiles/git/.gitignore ~
+
+# Git
+git config --global core.excludesfile ~/.gitignore
+
+exec zsh

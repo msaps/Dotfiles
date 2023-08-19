@@ -1,11 +1,11 @@
 
-all: core homebrew gems
+all: core brew gems
 
 core:
 	git submodule update --init --recursive
 	sh ./Corefile
 
-homebrew:
+brew:
 	sh ./Brewfile
 
 gems:
