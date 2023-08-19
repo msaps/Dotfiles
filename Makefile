@@ -9,7 +9,7 @@ homebrew:
 	sh ./Brewfile
 
 gems:
-	rbenv install 2.5.3
-	rbenv global 2.5.3
+	rbenv install 3.2.2
+	rbenv global 3.2.2
 	gem install bundler
 	bundle install

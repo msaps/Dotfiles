@@ -1,29 +1,27 @@
 #! bin/bash
 
 # Install Homebrew
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+which -s brew
+if [[ $? != 0 ]] ; then
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
 # Utilities
-function install_brew() {
+function install() {
 	brew install $1;
-}
-function install_cask() {
-	brew cask install $1;
 }
 
 # Pre-requisites
-install_brew cask;
+install cask;
 
 # General
-install_brew git;
-install_brew rbenv;
+install git;
+install rbenv;
 
 # iOS
-install_brew swiftlint;
+install swiftlint;
 
 # Casks
-install_cask slack;
-install_cask tower;
-install_cask iterm2;
-install_cask visual-studio-code;
-install_cask sketch;
+install tower;
+install iterm2;
+install visual-studio-code;
