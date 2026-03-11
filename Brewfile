@@ -11,17 +11,19 @@ function install() {
 	brew install $1;
 }
 
-# Pre-requisites
-install cask;
-
 # General
 install git;
+
+# Core Casks
+install iterm2;
+install tower;
+install visual-studio-code;
+
+# Ruby
 install rbenv;
+
+# Node
+install volta;
 
 # iOS
 install swiftlint;
-
-# Casks
-install tower;
-install iterm2;
-install visual-studio-code;
