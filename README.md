@@ -7,7 +7,7 @@ Personal dotfiles for macOS development environment setup.
 On a fresh Mac, run:
 
 ```bash
-git clone git@github.com:msaps/Dotfiles.git ~/.dotfiles && ~/.dotfiles/install.sh
+git clone https://github.com/msaps/Dotfiles.git ~/.dotfiles && ~/.dotfiles/install.sh
 ```
 
 Or if the repo is already cloned:
@@ -19,22 +19,26 @@ Or if the repo is already cloned:
 ## What's Included
 
 ### Shell
+
 - **ZSH** with Oh My ZSH
 - **zsh-autosuggestions** plugin
 - Custom aliases and PATH configuration
 
 ### Development Tools
+
 - **Homebrew** packages and casks
 - **rbenv** + Ruby 3.2.2
 - **Volta** for Node.js
 - **SwiftLint**, **Vapor**, **xcodes**
 
 ### Applications
+
 - VS Code, Cursor, iTerm2, Tower
 - Claude, Figma, Proxyman
 - And more (see `Brewfile`)
 
 ### Configurations
+
 - Git config with global gitignore
 - GitHub CLI settings
 - Claude Code preferences
