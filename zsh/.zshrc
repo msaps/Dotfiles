@@ -8,12 +8,14 @@ plugins=(git z xcode macos zsh-autosuggestions)
 
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 
-source $ZSH/oh-my-zsh.sh
+# Volta
+export VOLTA_HOME="$HOME/.volta"
 
 # User configuration
 export LANG=en_US.UTF-8
@@ -25,3 +27,5 @@ alias l="ls"
 alias tower="gittower ./"
 alias tw="gittower ./"
 alias ddata="rm -r ~/Library/Developer/Xcode/DerivedData"
+
+source $ZSH/oh-my-zsh.sh

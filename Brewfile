@@ -1,29 +1,47 @@
-#! bin/bash
+# Taps
+tap "homebrew/bundle"
+tap "homebrew/cask-fonts"
+tap "xcodesorg/made"
 
-# Install Homebrew
-which -s brew
-if [[ $? != 0 ]] ; then
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
+# Core CLI Tools
+brew "git"
+brew "gh"
+brew "curl"
+brew "aria2"
+brew "cloc"
 
-# Utilities
-function install() {
-	brew install $1;
-}
+# Development
+brew "go"
+brew "rbenv"
+brew "volta"
+brew "swiftlint"
+brew "vapor"
+brew "xcodesorg/made/xcodes"
 
-# General
-install git;
+# Docker
+brew "docker"
+cask "docker"
 
-# Core Casks
-install iterm2;
-install tower;
-install visual-studio-code;
+# Applications - Development
+cask "visual-studio-code"
+cask "cursor"
+cask "iterm2"
+cask "tower"
+cask "proxyman"
+cask "rapidapi"
+cask "sf-symbols"
 
-# Ruby
-install rbenv;
+# Applications - AI
+cask "claude"
 
-# Node
-install volta;
+# Applications - Design
+cask "figma"
 
-# iOS
-install swiftlint;
+# Applications - Utilities
+cask "google-chrome"
+cask "portkiller"
+cask "repobar"
+cask "steam"
+
+# Fonts
+cask "font-caskaydia-cove-nerd-font"

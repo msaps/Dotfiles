@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(brew leaves:*)",
+      "Bash(brew list:*)",
+      "Bash(chmod +x:*)"
+    ]
+  }
+}

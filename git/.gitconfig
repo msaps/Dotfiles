@@ -1,5 +1,5 @@
+[core]
+	excludesfile = ~/.gitignore
 [user]
 	name = Merrick Sapsford
 	email = merrick@sapsford.tech
-[core]
-	excludesfile = ~/.gitignore

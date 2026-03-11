@@ -1,0 +1,3 @@
+# Local settings (not to be tracked)
+.claude/
+*.local.json
