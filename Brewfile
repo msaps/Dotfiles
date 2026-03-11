@@ -1,6 +1,4 @@
 # Taps
-tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 tap "xcodesorg/made"
 
 # Core CLI Tools
@@ -20,7 +18,7 @@ brew "xcodesorg/made/xcodes"
 
 # Docker
 brew "docker"
-cask "docker"
+cask "docker-desktop"
 
 # Applications - Development
 cask "visual-studio-code"
@@ -37,7 +35,6 @@ cask "claude"
 cask "figma"
 
 # Applications - Utilities
-cask "google-chrome"
 cask "portkiller"
 cask "repobar"
 cask "steam"
