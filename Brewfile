@@ -15,6 +15,7 @@ brew "xcodesorg/made/xcodes"
 
 # Docker
 brew "docker"
+brew "docker-compose"
 cask "docker-desktop"
 
 # Applications - Development
