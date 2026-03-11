@@ -1,6 +1,3 @@
-# Taps
-tap "xcodesorg/made"
-
 # Core CLI Tools
 brew "git"
 brew "gh"
@@ -31,13 +28,9 @@ cask "sf-symbols"
 # Applications - AI
 cask "claude"
 
-# Applications - Design
-cask "figma"
-
 # Applications - Utilities
-cask "portkiller"
-cask "repobar"
-cask "steam"
+cask "productdevbook/tap/portkiller"
+cask "steipete/tap/repobar"
 
 # Fonts
 cask "font-caskaydia-cove-nerd-font"
