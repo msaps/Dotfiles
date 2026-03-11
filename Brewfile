@@ -24,7 +24,6 @@ cask "docker"
 
 # Applications - Development
 cask "visual-studio-code"
-cask "cursor"
 cask "iterm2"
 cask "tower"
 cask "proxyman"
