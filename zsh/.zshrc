@@ -29,3 +29,8 @@ alias tw="gittower ./"
 alias ddata="rm -r ~/Library/Developer/Xcode/DerivedData"
 
 source $ZSH/oh-my-zsh.sh
+
+# Docker Desktop
+fpath=(~/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
