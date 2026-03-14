@@ -10,6 +10,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git status:*)",
+      "Bash(git branch:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
       "Bash(pnpm:*)"
     ]
   },
