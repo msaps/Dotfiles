@@ -24,7 +24,17 @@ These rules are ABSOLUTE:
 
 - ALWAYS use environment variables
 
+### NEVER Commit to main
+
+- NEVER commit directly onto `main` branches.
+- ALWAYS create a `feature/*` branch for your work.
+
 ## ALWAYS DO
 
-- Commit often - commits should be small and well structured.
-- Commit after each phase of a plan has been completed.
+These reules are ABSOLUTE:
+
+### ALWAYS Commit Often
+
+- ALWAYS commit after each individual part of an implementation of a plan is complete.
+- ALWAYS add a descriptive commit message and description.
+- ALWAYS use imperative present tense in commit messages.
