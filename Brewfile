@@ -32,6 +32,7 @@ cask "claude"
 # Applications - Utilities
 cask "productdevbook/tap/portkiller"
 cask "steipete/tap/repobar"
+cask "steipete/tap/codexbar"
 
 # Fonts
 cask "font-caskaydia-cove-nerd-font"
