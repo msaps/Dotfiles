@@ -13,6 +13,7 @@
       "Bash(git branch:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
+      "Bash(git push:*)",
       "Bash(pnpm:*)"
     ]
   },
