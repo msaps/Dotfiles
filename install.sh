@@ -63,6 +63,7 @@ ln -sf "$DOTFILES_DIR/misc/.curlrc" "$HOME/.curlrc"
 # Claude Code
 mkdir -p "$HOME/.claude"
 ln -sf "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+ln -sf "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 
 # GitHub CLI
