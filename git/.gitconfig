@@ -3,3 +3,5 @@
 [user]
 	name = Merrick Sapsford
 	email = merrick@sapsford.tech
+[init]
+	defaultBranch = main
