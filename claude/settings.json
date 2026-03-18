@@ -16,7 +16,8 @@
       "Bash(git push:*)",
       "Bash(pnpm:*)",
       "Bash(find:*"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   },
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true
