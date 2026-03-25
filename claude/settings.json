@@ -20,6 +20,12 @@
       "Bash(find:*)",
       "Bash(grep:*)"
     ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(curl *)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ],
     "defaultMode": "acceptEdits"
   },
   "model": "opusplan",
