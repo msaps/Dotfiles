@@ -67,6 +67,10 @@ ln -sf "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 
+# Codex
+mkdir -p "$HOME/.codex"
+ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
+
 # GitHub CLI
 mkdir -p "$HOME/.config/gh"
 ln -sf "$DOTFILES_DIR/gh/config.yml" "$HOME/.config/gh/config.yml"
