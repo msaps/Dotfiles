@@ -61,10 +61,14 @@ ln -sf "$DOTFILES_DIR/git/.gitignore" "$HOME/.gitignore"
 # Misc
 ln -sf "$DOTFILES_DIR/misc/.curlrc" "$HOME/.curlrc"
 
+# Agents
+mkdir -p "$HOME/.agents"
+ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.agents/commands"
+
 # Claude Code
 mkdir -p "$HOME/.claude"
 ln -sf "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-ln -sf "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
+ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.claude/commands"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 
 # Codex
