@@ -63,6 +63,7 @@ ln -sf "$DOTFILES_DIR/misc/.curlrc" "$HOME/.curlrc"
 
 # Agents
 mkdir -p "$HOME/.agents"
+ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
 ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.agents/commands"
 
 # Claude Code
