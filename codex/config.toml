@@ -1,1 +1,3 @@
-project_doc_fallback_filenames = ["CLAUDE.md"]
+[mcp_servers.XcodeBuildMCP]
+command = "npx"
+args = ["-y", "xcodebuildmcp@latest", "mcp"]
