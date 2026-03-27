@@ -68,12 +68,14 @@ ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.agents/commands"
 
 # Claude Code
 mkdir -p "$HOME/.claude"
-ln -sf "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.claude/commands"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 
 # Codex
 mkdir -p "$HOME/.codex"
+ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
+ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.codex/commands"
 ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
 
 # GitHub CLI
