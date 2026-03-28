@@ -1,0 +1,6 @@
+[mcp_servers.XcodeBuildMCP]
+command = "npx"
+args = ["-y", "xcodebuildmcp@latest", "mcp"]
+
+[projects."/Users/msaps/.dotfiles"]
+trust_level = "trusted"
