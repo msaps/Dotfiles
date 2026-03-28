@@ -76,6 +76,7 @@ mkdir -p "$HOME/.codex"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
 ln -sf "$DOTFILES_DIR/codex/commands" "$HOME/.codex/commands"
 ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
+ln -sf "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
 
 # GitHub CLI
 mkdir -p "$HOME/.config/gh"
