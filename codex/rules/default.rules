@@ -1,4 +1,40 @@
 prefix_rule(
+    pattern = ["ls"],
+    decision = "allow",
+    justification = "Allow directory listing during repository exploration"
+)
+
+prefix_rule(
+    pattern = ["find"],
+    decision = "allow",
+    justification = "Allow file discovery during repository exploration"
+)
+
+prefix_rule(
+    pattern = ["rg"],
+    decision = "allow",
+    justification = "Allow fast text and file search during repository exploration"
+)
+
+prefix_rule(
+    pattern = ["grep"],
+    decision = "allow",
+    justification = "Allow text search during repository exploration"
+)
+
+prefix_rule(
+    pattern = ["cat"],
+    decision = "allow",
+    justification = "Allow reading file contents during repository exploration"
+)
+
+prefix_rule(
+    pattern = ["sed"],
+    decision = "allow",
+    justification = "Allow non-interactive file reads during repository exploration"
+)
+
+prefix_rule(
     pattern = ["git", "status"],
     decision = "allow",
     justification = "Allow repository status checks for review and PR workflows"
