@@ -1,77 +1,63 @@
 # Dotfiles
 
-Personal dotfiles for macOS development environment setup.
+Personal macOS dotfiles used for two jobs:
 
-## Quick Install
+1. Keep everyday shell and tool configuration under version control.
+2. Bootstrap a fresh machine by installing packages and wiring the managed files into `$HOME`.
 
-On a fresh Mac, run:
+The repository is intentionally simple. Most folders mirror a target location in the home directory, and [`install.sh`](/Users/msaps/.dotfiles/install.sh) is the bootstrap script that installs dependencies and recreates the symlinks.
+
+## Quick Start
+
+Clone the repo into `~/.dotfiles` and run the installer:
 
 ```bash
-git clone https://github.com/msaps/Dotfiles.git ~/.dotfiles && ~/.dotfiles/install.sh
-```
-
-Or if the repo is already cloned:
-
-```bash
+git clone git@github.com:msaps/Dotfiles.git ~/.dotfiles
 ~/.dotfiles/install.sh
 ```
 
-## What's Included
+If the repo is already present:
 
-### Shell
-
-- **ZSH** with Oh My ZSH
-- **zsh-autosuggestions** plugin
-- Custom aliases and PATH configuration
-
-### Development Tools
-
-- **Homebrew** packages and casks
-- **rbenv** + Ruby 3.2.2
-- **Volta** for Node.js
-- **SwiftLint**, **Vapor**, **xcodes**
-
-### Applications
-
-- VS Code, Cursor, iTerm2, Tower
-- Claude, Figma, Proxyman
-- And more (see `Brewfile`)
-
-### Configurations
-
-- Git config with global gitignore
-- GitHub CLI settings
-- Claude Code preferences
-- iTerm2 fonts (Roboto Mono for Powerline)
-
-## Structure
-
-```
-~/.dotfiles/
-├── install.sh       # Main install script
-├── Brewfile         # Homebrew packages
-├── Gemfile          # Ruby gems
-├── zsh/             # ZSH configuration
-├── git/             # Git configuration
-├── claude/          # Claude Code settings
-├── gh/              # GitHub CLI config
-├── misc/            # Other dotfiles
-└── iterm/           # iTerm2 fonts & profiles
+```bash
+cd ~/.dotfiles
+./install.sh
 ```
 
-## Manual Steps
+## What This Repo Manages
 
-After running the install script:
+- Shell startup files for `zsh`
+- Global Git config and ignore rules
+- Homebrew environment and package list
+- GitHub CLI config
+- Claude and Codex local agent configuration
+- iTerm fonts and profile export
+- A few machine-level helper files such as `.curlrc`
 
-1. **Restart terminal** or run `exec zsh`
-2. **Import iTerm2 profile**: Preferences > Profiles > Import JSON
-3. **Authenticate GitHub CLI**: `gh auth login`
-4. **Authenticate Claude Code**: `claude` and follow prompts
+## Project Guide
+
+The main project documentation lives in [`docs/project-guide.md`](/Users/msaps/.dotfiles/docs/project-guide.md). It covers:
+
+- the folder layout
+- the symlink map
+- the installer flow
+- bootstrap assumptions
+- how to update the repo safely
+
+## Manual Steps After Install
+
+Some tools still require interactive setup after the script finishes:
+
+1. Restart the shell or run `exec zsh`.
+2. Import [`iterm/iterm-profiles.json`](/Users/msaps/.dotfiles/iterm/iterm-profiles.json) into iTerm2 if you want the saved profile.
+3. Run `gh auth login`.
+4. Launch Claude and Codex and complete any first-run authentication.
 
 ## Updating
 
-Pull the latest changes and re-run the install script:
+Pull the latest changes and rerun the installer:
 
 ```bash
-cd ~/.dotfiles && git pull && ./install.sh
+cd ~/.dotfiles
+git pull
+./install.sh
 ```
