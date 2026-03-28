@@ -68,7 +68,7 @@ ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
 # Claude Code
 mkdir -p "$HOME/.claude"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
-ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.claude/commands"
+ln -sf "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 
 # Codex
