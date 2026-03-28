@@ -74,7 +74,7 @@ ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 # Codex
 mkdir -p "$HOME/.codex"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
-ln -sf "$DOTFILES_DIR/agents/commands" "$HOME/.codex/commands"
+ln -sf "$DOTFILES_DIR/codex/commands" "$HOME/.codex/commands"
 ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
 
 # GitHub CLI
