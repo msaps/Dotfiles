@@ -1,0 +1,83 @@
+prefix_rule(
+    pattern = ["git", "status"],
+    decision = "allow",
+    justification = "Allow repository status checks for review and PR workflows"
+)
+
+prefix_rule(
+    pattern = ["git", "branch"],
+    decision = "allow",
+    justification = "Allow branch inspection and creation for PR workflows"
+)
+
+prefix_rule(
+    pattern = ["git", "checkout"],
+    decision = "allow",
+    justification = "Allow switching to or creating working branches"
+)
+
+prefix_rule(
+    pattern = ["git", "remote"],
+    decision = "allow",
+    justification = "Allow reading remote configuration during PR preparation"
+)
+
+prefix_rule(
+    pattern = ["git", "symbolic-ref"],
+    decision = "allow",
+    justification = "Allow resolving the remote default branch"
+)
+
+prefix_rule(
+    pattern = ["git", "log"],
+    decision = "allow",
+    justification = "Allow commit history inspection for review and PR summaries"
+)
+
+prefix_rule(
+    pattern = ["git", "diff"],
+    decision = "allow",
+    justification = "Allow diff inspection for review and PR summaries"
+)
+
+prefix_rule(
+    pattern = ["git", "add"],
+    decision = "allow",
+    justification = "Allow staging files before creating commits"
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "allow",
+    justification = "Allow creating commits without an extra permission prompt"
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "allow",
+    justification = "Allow pushing branches before opening pull requests"
+)
+
+prefix_rule(
+    pattern = ["gh", "auth"],
+    decision = "allow",
+    justification = "Allow checking GitHub CLI authentication for PR workflows"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "view"],
+    decision = "allow",
+    justification = "Allow reading pull request state from GitHub"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "create"],
+    decision = "allow",
+    justification = "Allow creating pull requests without an extra permission prompt"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "allow",
+    justification = "Allow enabling PR auto-merge from the CLI"
+)
