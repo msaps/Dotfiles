@@ -117,3 +117,4 @@ prefix_rule(
     decision = "allow",
     justification = "Allow enabling PR auto-merge from the CLI"
 )
+prefix_rule(pattern=["swift", "test"], decision="allow")
