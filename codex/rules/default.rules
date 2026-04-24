@@ -120,3 +120,7 @@ prefix_rule(
 prefix_rule(pattern=["swift", "test"], decision="allow")
 prefix_rule(pattern=["git", "rebase"], decision="allow")
 prefix_rule(pattern=["/bin/zsh", "-lc", "GIT_EDITOR=true git rebase --continue"], decision="allow")
+prefix_rule(pattern=["gh", "run", "view"], decision="allow")
+prefix_rule(pattern=["curl", "-sS", "-X", "POST"], decision="allow")
+prefix_rule(pattern=["curl", "-sS"], decision="allow")
+prefix_rule(pattern=["gh", "repo", "view"], decision="allow")
