@@ -16,9 +16,11 @@
       "Bash(git push:*)",
       "Bash(git reset:*)",
       "Bash(git checkout:*)",
+      "Bash(git -c:*)",
       "Bash(pnpm:*)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(xcodebuildmcp:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",

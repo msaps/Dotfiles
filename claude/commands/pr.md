@@ -51,18 +51,11 @@ Create a pull request for the current branch on GitHub.
    )"
    ```
 
-7. **Enable auto-merge** if the repository supports it:
-   ```bash
-   gh pr merge --auto --squash
-   ```
-   - If auto-merge is not available, inform the user
-   - **NEVER** merge the PR directly - only enable auto-merge
-
-8. **Return the PR URL** so the user can review it
+7. **Return the PR URL** so the user can review it
 
 ## Important Rules
 
-- NEVER merge the PR directly - only enable auto-merge
+- NEVER merge the PR directly
 - NEVER skip the description - always provide a detailed summary
 - ALWAYS use imperative present tense for the title
 - ALWAYS analyze all commits, not just the most recent one
