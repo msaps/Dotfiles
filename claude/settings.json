@@ -20,7 +20,8 @@
       "Bash(pnpm:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(xcodebuildmcp:*)"
+      "Bash(xcodebuildmcp:*)",
+      "Bash(sed:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",
