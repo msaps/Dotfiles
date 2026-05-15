@@ -26,6 +26,7 @@ Trigger a release on GitHub by pushing a tag.
    - If there are open pull requests, warn the user.
    - If the version number is semantically invalid, reject the request.
    - If the version number is not greater than the previous version, reject the request.
+   - Ensure that the project source versions match the proposed version number, otherwise warn the user and help to resolve it. 
 
 3. **Create the Tag**:
    - Create a tag with the provided semantic version number.
