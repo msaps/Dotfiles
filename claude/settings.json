@@ -23,7 +23,8 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(xcodebuildmcp:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(swift build:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -36,5 +37,6 @@
   "model": "opusplan",
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }
