@@ -23,6 +23,7 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(xcodebuildmcp:*)",
+      "Bash(xcodebuild:*)",
       "Bash(sed:*)",
       "Bash(swift build:*)"
     ],
