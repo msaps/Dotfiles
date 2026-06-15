@@ -33,7 +33,7 @@
       "Read(./.env)",
       "Read(./.env.*)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "model": "opusplan",
   "enabledPlugins": {
