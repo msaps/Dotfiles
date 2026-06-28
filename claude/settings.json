@@ -35,12 +35,15 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opusplan",
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "model": "sonnet"
 }
