@@ -11,7 +11,7 @@ brew "rbenv"
 brew "volta"
 brew "swiftlint"
 brew "vapor"
-brew "xcodesorg/made/xcodes"
+brew "xcodes"
 
 # Docker
 brew "docker"

@@ -37,10 +37,8 @@ ln -sf "$DOTFILES_DIR/homebrew/brew.env" "$HOME/.homebrew/brew.env"
 
 # Trust third-party taps
 echo "==> Trusting Homebrew taps..."
-brew tap xcodesorg/made
 brew tap productdevbook/tap
 brew tap steipete/tap
-brew trust xcodesorg/made
 brew trust productdevbook/tap
 brew trust steipete/tap
 
