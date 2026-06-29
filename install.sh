@@ -5,6 +5,11 @@ DOTFILES_DIR="$HOME/.dotfiles"
 
 echo "==> Installing dotfiles..."
 
+# macOS defaults
+echo "==> Configuring macOS defaults..."
+defaults write com.apple.finder AppleShowAllFiles -bool true
+killall Finder
+
 # Clone dotfiles if not already present
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "==> Cloning dotfiles repository..."
