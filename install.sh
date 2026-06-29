@@ -97,10 +97,10 @@ ln -sf "$DOTFILES_DIR/gh/config.yml" "$HOME/.config/gh/config.yml"
 
 # Install Ruby
 echo "==> Setting up Ruby..."
-if ! rbenv versions | grep -q "3.2.2"; then
-    rbenv install 3.2.2
+if ! rbenv versions | grep -q "3.4.9"; then
+    rbenv install 3.4.9
 fi
-rbenv global 3.2.2
+rbenv global 3.4.9
 eval "$(rbenv init - zsh)"
 
 # Install Ruby gems
