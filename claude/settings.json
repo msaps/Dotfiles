@@ -45,5 +45,5 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "model": "sonnet"
+  "model": "opusplan"
 }
