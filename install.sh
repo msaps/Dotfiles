@@ -45,16 +45,21 @@ fi
 mkdir -p "$HOME/.homebrew"
 ln -sf "$DOTFILES_DIR/homebrew/brew.env" "$HOME/.homebrew/brew.env"
 
-# Trust third-party taps
-echo "==> Trusting Homebrew taps..."
-brew tap productdevbook/tap
-brew tap steipete/tap
-brew trust productdevbook/tap
-brew trust steipete/tap
-
-# Install packages from Brewfile
-echo "==> Installing Homebrew packages..."
-brew bundle --file="$DOTFILES_DIR/Brewfile"
+# Install packages from Brewfile (skip if no write access)
+BREW_PREFIX="$(brew --prefix)"
+if [ ! -w "$BREW_PREFIX/Cellar" ]; then
+    echo "==> Skipping Homebrew packages (no write access to $BREW_PREFIX/Cellar)"
+elif brew bundle check --file="$DOTFILES_DIR/Brewfile" &>/dev/null; then
+    echo "==> Homebrew packages already up to date"
+else
+    echo "==> Trusting Homebrew taps..."
+    brew tap productdevbook/tap
+    brew tap steipete/tap
+    brew trust productdevbook/tap
+    brew trust steipete/tap
+    echo "==> Installing Homebrew packages..."
+    brew bundle --file="$DOTFILES_DIR/Brewfile"
+fi
 
 # Install Oh My ZSH
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
