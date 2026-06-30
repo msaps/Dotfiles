@@ -5,6 +5,7 @@ brew "curl"
 brew "aria2"
 brew "cloc"
 brew "fzf"
+brew "btop"
 
 # Development
 brew "go"
