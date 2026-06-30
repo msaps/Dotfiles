@@ -33,6 +33,9 @@ alias ddata="rm -r ~/Library/Developer/Xcode/DerivedData"
 
 source $ZSH/oh-my-zsh.sh
 
+# Machine-local overrides (not tracked)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
 # Docker Desktop
 fpath=(~/.docker/completions $fpath)
 autoload -Uz compinit
