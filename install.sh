@@ -7,13 +7,18 @@ echo "==> Installing dotfiles..."
 
 # macOS defaults
 echo "==> Configuring macOS defaults..."
-defaults write com.apple.finder AppleShowAllFiles -bool true
-killall Finder
+if ! defaults read com.apple.finder AppleShowAllFiles 2>/dev/null | grep -q "1"; then
+    defaults write com.apple.finder AppleShowAllFiles -bool true
+    killall Finder
+fi
 
-# Clone dotfiles if not already present
+# Clone or update dotfiles
 if [ ! -d "$DOTFILES_DIR" ]; then
     echo "==> Cloning dotfiles repository..."
     git clone git@github.com:msaps/Dotfiles.git "$DOTFILES_DIR"
+else
+    echo "==> Updating dotfiles..."
+    git -C "$DOTFILES_DIR" pull --rebase
 fi
 
 cd "$DOTFILES_DIR"
