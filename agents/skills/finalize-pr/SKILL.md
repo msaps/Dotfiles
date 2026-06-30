@@ -131,19 +131,19 @@ mutation($threadId: ID!) {
 
 Only resolve threads where the underlying concern has been fully addressed by code or a satisfactory reply. Leave threads open if the discussion is ongoing or the feedback was deferred.
 
-### Step 7: Final Review
+### Step 7: Sanity Check
 
-Run `/code-review` on the full PR diff to catch anything not covered by comments:
+Run a lightweight review focused only on changes made in this session:
 
 ```bash
 gh pr diff [number]
+gh pr checks [number]
 ```
 
-Look for:
-- Bugs introduced by the fixes made in this session
-- Anything the reviewers might have missed
+Use `/code-review low` — this is a quick sanity check, not a full audit. The PR has already been through human review. Focus on:
+- Regressions or bugs introduced by fixes made in this session
 - Unresolved threads still showing as open
-- CI/check status: `gh pr checks [number]`
+- Failing CI checks
 
 Report a clear green light or list any remaining blockers. Do not approve the PR — that is for the human reviewer to do.
 
