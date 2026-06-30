@@ -26,15 +26,16 @@ eval "$(fzf --zsh)"
 # Aliases
 alias zshconfig="code ~/.zshrc"
 alias lg="lazygit"
-alias t="tmux"
-alias ta="tmux attach"
-alias tl="tmux ls"
-alias tn="tmux new -s"
 alias code="code ./"
 alias l="ls"
 alias tower="gittower ./"
 alias tw="gittower ./"
 alias ddata="rm -r ~/Library/Developer/Xcode/DerivedData"
+alias t="tmux"
+alias tl="tmux ls"
+alias tn="tmux new -s"
+alias ta="tmux attach -t"
+alias tk="tmux kill-session -t"
 
 source $ZSH/oh-my-zsh.sh
 
