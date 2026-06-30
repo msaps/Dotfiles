@@ -7,6 +7,7 @@ brew "cloc"
 brew "fzf"
 brew "btop"
 brew "tmux"
+brew "lazygit"
 
 # Development
 brew "go"
