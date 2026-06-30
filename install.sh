@@ -85,7 +85,18 @@ ln -sf "$DOTFILES_DIR/git/.gitignore" "$HOME/.gitignore"
 ln -sf "$DOTFILES_DIR/misc/.curlrc" "$HOME/.curlrc"
 
 # AI agents (Claude Code, Codex, etc.)
-bash "$DOTFILES_DIR/agents.sh"
+echo "==> Setting up AI agents..."
+mkdir -p "$HOME/.agents"
+ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
+mkdir -p "$HOME/.claude"
+ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+ln -sf "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
+ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+mkdir -p "$HOME/.codex"
+ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
+ln -sf "$DOTFILES_DIR/codex/prompts" "$HOME/.codex/prompts"
+ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
+ln -sf "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
 
 # GitHub CLI
 mkdir -p "$HOME/.config/gh"
