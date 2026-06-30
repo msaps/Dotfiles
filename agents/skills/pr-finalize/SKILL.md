@@ -1,5 +1,5 @@
 ---
-name: finalize-pr
+name: pr-finalize
 description: Finalize a pull request by reading all comments, addressing required changes with commits and pushes, replying to comments inline, resolving threads, and performing a final review before merge. Use when a PR has received bot or human review feedback that needs to be acted on.
 ---
 
@@ -10,7 +10,7 @@ Fully work through all outstanding PR comments, address required changes, and co
 ## Usage
 
 ```
-/finalize-pr [PR number]
+/pr-finalize [PR number]
 ```
 
 If no PR number is provided, infer it from the current branch using `gh pr view`.
@@ -153,3 +153,4 @@ Report a clear green light or list any remaining blockers. Do not approve the PR
 - Never force-push.
 - If a comment is ambiguous about whether action is required, err on the side of asking the user rather than guessing.
 - Bot authors to recognise and not reply to: `github-actions[bot]`, `dependabot[bot]`, `codecov[bot]`, `renovate[bot]`, `coderabbitai[bot]`, `danger`, `sonarcloud[bot]`.
+- **Never approve the PR** — approval is always the human reviewer's decision. If the PR requires approvals before merge, stop and inform the user; do not attempt to approve, bypass, or work around the requirement.
