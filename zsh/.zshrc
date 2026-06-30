@@ -25,6 +25,10 @@ eval "$(fzf --zsh)"
 
 # Aliases
 alias zshconfig="code ~/.zshrc"
+alias t="tmux"
+alias ta="tmux attach"
+alias tl="tmux ls"
+alias tn="tmux new -s"
 alias code="code ./"
 alias l="ls"
 alias tower="gittower ./"

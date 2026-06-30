@@ -88,6 +88,7 @@ ln -sf "$DOTFILES_DIR/git/.gitignore" "$HOME/.gitignore"
 
 # Misc
 ln -sf "$DOTFILES_DIR/misc/.curlrc" "$HOME/.curlrc"
+ln -sf "$DOTFILES_DIR/tmux.conf" "$HOME/.tmux.conf"
 
 # AI agents (Claude Code, Codex, etc.)
 echo "==> Setting up AI agents..."

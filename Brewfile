@@ -6,6 +6,7 @@ brew "aria2"
 brew "cloc"
 brew "fzf"
 brew "btop"
+brew "tmux"
 
 # Development
 brew "go"
