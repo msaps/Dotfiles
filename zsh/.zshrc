@@ -20,6 +20,9 @@ export VOLTA_HOME="$HOME/.volta"
 # User configuration
 export LANG=en_US.UTF-8
 
+# FZF
+eval "$(fzf --zsh)"
+
 # Aliases
 alias zshconfig="code ~/.zshrc"
 alias code="code ./"

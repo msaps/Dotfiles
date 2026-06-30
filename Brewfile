@@ -4,6 +4,7 @@ brew "gh"
 brew "curl"
 brew "aria2"
 brew "cloc"
+brew "fzf"
 
 # Development
 brew "go"
