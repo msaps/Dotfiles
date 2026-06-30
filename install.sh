@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "==> Installing dotfiles..."
 
@@ -94,15 +94,22 @@ ln -sf "$DOTFILES_DIR/tmux.conf" "$HOME/.tmux.conf"
 echo "==> Setting up AI agents..."
 mkdir -p "$HOME/.agents"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
+mkdir -p "$HOME/.agents/skills"
 mkdir -p "$HOME/.claude"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 ln -sfn "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+mkdir -p "$HOME/.claude/skills"
 mkdir -p "$HOME/.codex"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
 ln -sfn "$DOTFILES_DIR/codex/prompts" "$HOME/.codex/prompts"
-ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
 ln -sfn "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
+# Symlink each skill individually so external tools can add skills alongside
+for skill_dir in "$DOTFILES_DIR/agents/skills"/*/; do
+    skill_name=$(basename "$skill_dir")
+    ln -sfn "$skill_dir" "$HOME/.agents/skills/$skill_name"
+    ln -sfn "$skill_dir" "$HOME/.claude/skills/$skill_name"
+done
 
 # GitHub CLI
 mkdir -p "$HOME/.config/gh"
