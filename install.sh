@@ -9,7 +9,7 @@ echo "==> Installing dotfiles..."
 echo "==> Configuring macOS defaults..."
 if ! defaults read com.apple.finder AppleShowAllFiles 2>/dev/null | grep -q "1"; then
     defaults write com.apple.finder AppleShowAllFiles -bool true
-    killall Finder
+    killall Finder 2>/dev/null || true
 fi
 
 # Clone or update dotfiles
