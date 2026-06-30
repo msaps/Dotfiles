@@ -5,3 +5,5 @@
 	email = merrick@sapsford.tech
 [init]
 	defaultBranch = main
+[include]
+	path = ~/.gitconfig.local
