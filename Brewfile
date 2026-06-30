@@ -31,7 +31,7 @@ cask "rapidapi"
 cask "sf-symbols"
 
 # Applications - AI
-brew "claude-code"
+cask "claude-code"
 cask "claude"
 
 # Applications - Utilities
