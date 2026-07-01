@@ -11,11 +11,16 @@ Create a well-structured GitHub issue for the current repository.
 
 ```
 /issue-creator [description]
+/issue-creator --auto --type <bug|enhancement|feature> --title "<title>" [fields]
 ```
 
-Provide a brief description of what you want to log. If none is given, ask the user what they want to create an issue for.
+**Interactive mode** (default): Converse with the user to gather missing fields, then create the issue.
 
-## Process
+**Auto mode** (`--auto`): All fields must be supplied upfront. No questions are asked. Fail immediately with a clear error if any required field is missing. Designed for autonomous agents and loops.
+
+---
+
+## Interactive Mode
 
 ### Step 1: Identify the Repository
 
@@ -55,33 +60,77 @@ Collect the information needed for the body. Ask the user for each field that wa
 - **Fix** — the proposed solution or approach (even if approximate).
 - **Requirements** — a complete list of everything that needs to be done to close the issue.
 
-### Step 4: Check for Existing Labels
+### Step 4: Ensure Labels Exist
 
 ```bash
 gh label list --json name
 ```
 
-Check whether labels matching `feature`, `enhancement`, and `bug` already exist. Note the exact casing/spelling for the type you need — GitHub label matching is case-sensitive with `gh issue create`.
-
-If the required label does not exist, create it:
-
-| Type        | Label        | Color   |
-|-------------|--------------|---------|
-| Feature     | `feature`    | `#0075ca` |
-| Enhancement | `enhancement`| `#a2eeef` |
-| Bug         | `bug`        | `#d73a4a` |
+Create any missing labels:
 
 ```bash
-gh label create "feature" --color "#0075ca" --description "New capability"
-gh label create "enhancement" --color "#a2eeef" --description "Improvement to existing functionality"
-gh label create "bug" --color "#d73a4a" --description "Something is broken"
+gh label create "feature" --color "#0075ca" --description "New capability" 2>/dev/null || true
+gh label create "enhancement" --color "#a2eeef" --description "Improvement to existing functionality" 2>/dev/null || true
+gh label create "bug" --color "#d73a4a" --description "Something is broken" 2>/dev/null || true
 ```
 
-### Step 5: Compose the Issue Body
+### Step 5: Compose and Create the Issue
 
-Construct the body using the details gathered in Step 3. Use the appropriate template:
+Construct the body from the gathered fields using the template for the issue type (see **Body Templates** below), then create:
 
-#### Feature / Enhancement body
+```bash
+gh issue create \
+  --title "{title}" \
+  --body "$(cat <<'EOF'
+{body}
+EOF
+)" \
+  --label "{label}"
+```
+
+Output the issue URL so the user can open it directly.
+
+---
+
+## Auto Mode
+
+Invoked with `--auto`. All required fields must be present in the invocation — do not ask the user for anything.
+
+### Required fields for all types
+
+- `--type bug | enhancement | feature`
+- `--title "<title>"`
+
+### Additional required fields by type
+
+**Bug**: `--problem`, `--fix`, `--requirements`
+
+**Feature / Enhancement**: `--overview`, `--goal`, `--requirements`
+
+### Validation
+
+If any required field for the given type is missing, stop immediately and output:
+
+```
+[issue-creator] Auto mode error: missing required fields: <field>, <field>
+```
+
+Do not attempt to create the issue with incomplete data.
+
+### Process
+
+1. Parse all provided fields from the invocation.
+2. Validate that every required field for the given type is present.
+3. Ensure the label exists (same label creation commands as interactive mode).
+4. Compose the body using the template for the issue type (see **Body Templates** below).
+5. Create the issue immediately with no confirmation.
+6. Output the issue URL.
+
+---
+
+## Body Templates
+
+### Feature / Enhancement
 
 ```markdown
 ## Overview
@@ -99,7 +148,7 @@ Construct the body using the details gathered in Step 3. Use the appropriate tem
 - {requirement N}
 ```
 
-#### Bug body
+### Bug
 
 ```markdown
 ## Problem
@@ -117,23 +166,11 @@ Construct the body using the details gathered in Step 3. Use the appropriate tem
 - {requirement N}
 ```
 
-### Step 6: Create the Issue
-
-```bash
-gh issue create \
-  --title "{title}" \
-  --body "$(cat <<'EOF'
-{body}
-EOF
-)" \
-  --label "{label}"
-```
-
-After creating, output the issue URL so the user can open it directly.
+---
 
 ## Notes
 
 - The issue title should be concise (under 70 characters) and written in imperative present tense (e.g. "Add dark mode support", "Fix crash on empty list", "Improve onboarding flow").
-- Requirements should be specific enough that a developer can close each one unambiguously. If the user gives vague requirements, push back with a clarifying question.
-- Do not add assignees, milestones, or projects unless the user explicitly requests them.
-- Do not create the issue silently — always confirm with the user first.
+- Requirements should be specific enough that a developer can close each one unambiguously.
+- Do not add assignees, milestones, or projects unless explicitly requested.
+- Label mapping: Feature → `feature`, Enhancement → `enhancement`, Bug → `bug`.
