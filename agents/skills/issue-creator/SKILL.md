@@ -117,15 +117,7 @@ Construct the body using the details gathered in Step 3. Use the appropriate tem
 - {requirement N}
 ```
 
-### Step 6: Confirm Before Creating
-
-Show the user a preview of the issue — title, type, and body — and ask for confirmation before creating it:
-
-> "Ready to create this issue. Does it look right, or would you like to change anything?"
-
-Do not create the issue until the user confirms. If they request changes, update the preview and confirm again.
-
-### Step 7: Create the Issue
+### Step 6: Create the Issue
 
 ```bash
 gh issue create \

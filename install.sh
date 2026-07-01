@@ -110,6 +110,15 @@ for skill_dir in "$DOTFILES_DIR/agents/skills"/*/; do
     ln -sfn "$skill_dir" "$HOME/.agents/skills/$skill_name"
     ln -sfn "$skill_dir" "$HOME/.claude/skills/$skill_name"
 done
+# Symlink each agent individually so external tools can add agents alongside
+mkdir -p "$HOME/.agents/agents"
+mkdir -p "$HOME/.claude/agents"
+for agent_file in "$DOTFILES_DIR/agents/agents"/*.md; do
+    [ -f "$agent_file" ] || continue
+    agent_name=$(basename "$agent_file")
+    ln -sf "$agent_file" "$HOME/.agents/agents/$agent_name"
+    ln -sf "$agent_file" "$HOME/.claude/agents/$agent_name"
+done
 
 # GitHub CLI
 mkdir -p "$HOME/.config/gh"
