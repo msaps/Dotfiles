@@ -34,13 +34,13 @@ Confirm this is the correct repo. If the working directory is not a GitHub repo,
 
 Based on the user's description, determine which type applies:
 
-- **Feature** — something new being added to the project that does not exist yet.
-- **Enhancement** — an improvement to something that already exists (behaviour, UX, performance, DX, etc.).
+- **Feature** — something new being added to the project that brings new functionality.
+- **Task** — a task that needs completing to improve or contribute to the project that does not directly bring new functionality.
 - **Bug** — something that is broken or not working as intended.
 
 If the type is not clear from the description, ask the user directly before proceeding:
 
-> "Is this a **Feature** (new capability), **Enhancement** (improvement to something existing), or **Bug** (something broken)?"
+> "Is this a **Feature** (new functionality), **Task** (improvement that brings no new functionality), or **Bug** (something broken)?"
 
 Do not guess if there is genuine ambiguity.
 
@@ -48,7 +48,7 @@ Do not guess if there is genuine ambiguity.
 
 Collect the information needed for the body. Ask the user for each field that was not already provided in their description. Be concise when asking — one question at a time if multiple fields are missing, or all at once if only one or two are needed.
 
-#### Feature or Enhancement
+#### Feature or Task
 
 - **Overview** — context for the issue: why we're doing it, relevant background, any constraints or decisions already made.
 - **Goal** — the single clear outcome we want this issue to achieve.
