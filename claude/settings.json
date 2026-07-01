@@ -7,6 +7,7 @@
       "Bash(volta list:*)",
       "Bash(volta run node:*)",
       "Bash(gh pr:*)",
+      "Bash(gh issue:*)",
       "Bash(gh release list:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
