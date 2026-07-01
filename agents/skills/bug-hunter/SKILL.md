@@ -61,73 +61,35 @@ For each finding, check whether an open issue with a substantially similar title
 
 ### Step 6: Create GitHub Issues
 
-For each remaining finding, create a GitHub issue directly using `gh issue create`. Do not ask for user confirmation — this skill is designed for autonomous operation.
+For each remaining finding, create an issue using the `issue-creator` skill in auto mode. Do not ask for user confirmation — this skill is designed for autonomous operation.
 
-Map finding types to labels:
-- `[BUG]` → label `bug`
-- `[PERFORMANCE]` → label `enhancement`
+Map finding types to the appropriate issue-creator type:
+- `[BUG]` → `--type bug`
+- `[PERFORMANCE]` → `--type enhancement`
 
-Ensure the labels exist before creating issues:
+For each `[BUG]` finding, invoke:
 
-```bash
-gh label list --json name
 ```
-
-Create any missing labels:
-```bash
-gh label create "bug" --color "#d73a4a" --description "Something is broken" 2>/dev/null || true
-gh label create "enhancement" --color "#a2eeef" --description "Improvement to existing functionality" 2>/dev/null || true
-```
-
-For each `[BUG]` finding, create the issue with this body structure:
-
-```markdown
-## Problem
-
-{problem from finding}
-
-## Fix
-
-{fix from finding}
-
-## Requirements
-
-{requirements list from finding}
-
----
-*Raised by the bug-hunter autonomous agent.*
-```
-
-For each `[PERFORMANCE]` finding, create the issue with this body structure:
-
-```markdown
-## Overview
-
-{context and problem from finding}
-
-## Goal
-
-Resolve the identified performance concern before it impacts users or becomes harder to fix at scale.
-
-## Requirements
-
-{requirements list from finding}
-
----
-*Raised by the bug-hunter autonomous agent.*
-```
-
-Create each issue:
-
-```bash
-gh issue create \
+/issue-creator --auto \
+  --type bug \
   --title "{title}" \
-  --body "$(cat <<'EOF'
-{body}
-EOF
-)" \
-  --label "{label}"
+  --problem "{problem from finding}" \
+  --fix "{fix from finding}" \
+  --requirements "{requirements list from finding}"
 ```
+
+For each `[PERFORMANCE]` finding, invoke:
+
+```
+/issue-creator --auto \
+  --type enhancement \
+  --title "{title}" \
+  --overview "{context and problem from finding}" \
+  --goal "Resolve the identified performance concern before it impacts users or becomes harder to fix at scale." \
+  --requirements "{requirements list from finding}"
+```
+
+If issue-creator returns an auto mode error (missing fields), log the error and skip that finding rather than stopping the whole run.
 
 ### Step 7: Report
 
