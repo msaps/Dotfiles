@@ -11,7 +11,6 @@ brew "lazygit"
 
 # Development
 brew "go"
-brew "rbenv"
 brew "volta"
 brew "swiftlint"
 brew "vapor"

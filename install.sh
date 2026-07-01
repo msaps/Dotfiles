@@ -124,20 +124,6 @@ done
 mkdir -p "$HOME/.config/gh"
 ln -sf "$DOTFILES_DIR/gh/config.yml" "$HOME/.config/gh/config.yml"
 
-# Install Ruby
-echo "==> Setting up Ruby..."
-RUBY_VERSION=$(rbenv install --list | grep -E '^\s*3\.4\.[0-9]+$' | tail -1 | tr -d ' ')
-if ! rbenv versions | grep -q "$RUBY_VERSION"; then
-    rbenv install "$RUBY_VERSION"
-fi
-rbenv global "$RUBY_VERSION"
-eval "$(rbenv init - zsh)"
-
-# Install Ruby gems
-echo "==> Installing Ruby gems..."
-gem install bundler --conservative
-bundle install
-
 # Install iTerm2 fonts
 echo "==> Installing iTerm2 fonts..."
 cp "$DOTFILES_DIR/iterm/"*.ttf "$HOME/Library/Fonts/" 2>/dev/null || true
