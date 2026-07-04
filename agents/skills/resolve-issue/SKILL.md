@@ -34,7 +34,7 @@ Identify and record:
 - **Requirements**: every discrete thing that must be done to close the issue
 - **Constraints**: anything explicitly out of scope or disallowed
 
-If the issue body is empty or the goal is genuinely unclear, stop and ask the user before proceeding.
+If the issue body is empty or the goal is genuinely unclear, stop and report the blocker. Do not proceed with an ambiguous goal.
 
 ### Step 2: Survey the Codebase
 
@@ -57,7 +57,7 @@ Before planning, compare the issue requirements against the current codebase:
 - **Scope creep risks** — adjacent problems visible in the codebase that are not part of this issue (note them, but do not address them here)
 - **Blocked requirements** — anything that cannot be implemented without a decision or dependency that is not yet resolved
 
-If any gaps or ambiguities would materially change the implementation approach, surface them now as a brief written summary before continuing. Proceed with the most reasonable interpretation and call it out explicitly.
+If any gaps or ambiguities would materially change the implementation approach, log a brief summary of the interpretation chosen and proceed. Do not stop for confirmation.
 
 ### Step 4: Create the Implementation Plan
 
@@ -99,7 +99,7 @@ The plan must contain:
 <Anything explicitly not being done here.>
 ```
 
-Present a brief summary of the plan to the user before implementing. This is the only planned pause for confirmation — do not ask again once implementation begins.
+Log a one-paragraph summary of the plan before proceeding to implementation. Do not wait for confirmation — proceed immediately.
 
 ### Step 5: Create a Feature Branch
 
@@ -178,8 +178,6 @@ For each **must fix** and **should fix** finding:
 git push
 ```
 
-If a finding is deferred, note it explicitly in the PR description.
-
 Re-run a quick sanity check after fixes:
 
 ```
@@ -187,6 +185,38 @@ Re-run a quick sanity check after fixes:
 ```
 
 Confirm no new issues were introduced.
+
+#### Raise Issues for Deferred Findings
+
+For every finding categorised as **defer**, and for every **should fix** finding that was not addressed (e.g. out of scope, risk too high to take before merge), create a GitHub issue immediately using `issue-creator` in auto mode. Do not skip any — every surfaced concern must either be fixed or tracked.
+
+Map finding categories to issue types:
+- Code quality, design concern, or improvement → `--type enhancement`
+- Correctness risk not blocking this PR → `--type bug`
+
+For each deferred finding, invoke:
+
+```
+/issue-creator --auto \
+  --type enhancement \
+  --title "{concise imperative title}" \
+  --overview "Surfaced during code review of PR resolving issue #<number>. {description of the finding and why it was deferred}" \
+  --goal "{what resolving this issue would achieve}" \
+  --requirements "{list of specific things to do}"
+```
+
+Or for a deferred correctness concern:
+
+```
+/issue-creator --auto \
+  --type bug \
+  --title "{concise imperative title}" \
+  --problem "{what is wrong and how it manifests}" \
+  --fix "{proposed approach}" \
+  --requirements "{list of specific things to do}"
+```
+
+Collect the URL of each created issue.
 
 ### Step 10: Open the Pull Request
 
@@ -201,7 +231,7 @@ The PR description must include:
 - A **Summary** section: 2–4 bullet points covering what changed and why
 - A **Test plan** section: what tests were added and how to verify the change manually if applicable
 - `Closes #<number>` on its own line so the issue auto-closes on merge
-- A **Deferred** section listing any review findings not addressed (omit if none)
+- A **Follow-up issues** section listing the URL of each issue created from deferred review findings (omit section entirely if none)
 
 ---
 
@@ -211,5 +241,6 @@ The PR description must include:
 - Never force-push.
 - Do not address issues or improvements beyond the scope of the target issue. Note them but leave them for separate issues.
 - If CI is configured, check `gh pr checks` after opening the PR and report the result. Do not merge — that is the human's decision.
-- If the issue is already closed, confirm with the user before proceeding.
+- If the issue is already closed, stop and report — do not reopen or implement silently.
 - If the issue is assigned to someone else, proceed normally — the skill does not gate on assignment.
+- This skill is designed to run headlessly. Do not pause for confirmation at any point except when the issue goal is genuinely ambiguous or a hard blocker is encountered.
