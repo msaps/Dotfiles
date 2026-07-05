@@ -1,6 +1,6 @@
 ---
 name: issue-creator
-description: Create a GitHub issue for the current repo with proper type classification (Feature, Task, Bug) set as a native Issue Type field (not a label), plus Effort and Priority evaluation. Use when the user wants to log a new feature, task, or bug as a GitHub issue.
+description: Create a GitHub issue for the current repo with proper type classification (Feature, Task, Bug) set as a native Issue Type field (not a label), plus Effort and Priority set as native issue fields.
 ---
 
 # Issue Creator
@@ -85,44 +85,53 @@ When you can make a confident call, present your evaluation briefly:
 
 > "I'd classify this as **Medium effort** (a few well-defined requirements, no major unknowns) and **High priority** (it blocks other planned work). Does that sound right, or would you adjust either?"
 
-If the user corrects either value, use their value. If you cannot confidently determine a value, omit it — do not add the label.
+If the user corrects either value, use their value. If you cannot confidently determine a value, omit it.
 
-### Step 5: Ensure Effort and Priority Labels Exist
+### Step 5: Compose and Create the Issue
 
-Only run this step if you have at least one confident Effort or Priority value to set.
-
-```bash
-gh label list --json name
-```
-
-Create any missing labels:
-
-```bash
-gh label create "effort:low"    --color "#c2e0c6" --description "Small, well-scoped change" 2>/dev/null || true
-gh label create "effort:medium" --color "#fef2c0" --description "Moderate scope and complexity" 2>/dev/null || true
-gh label create "effort:high"   --color "#f9d0c4" --description "Large scope or high complexity" 2>/dev/null || true
-
-gh label create "priority:low"    --color "#e4e4e4" --description "Nice to have, low impact" 2>/dev/null || true
-gh label create "priority:medium" --color "#bfd4f2" --description "Planned, valuable work" 2>/dev/null || true
-gh label create "priority:high"   --color "#0075ca" --description "Important, near-term impact" 2>/dev/null || true
-gh label create "priority:urgent" --color "#d73a4a" --description "Blocking or critical path" 2>/dev/null || true
-```
-
-### Step 6: Compose and Create the Issue
-
-Construct the body from the gathered fields using the template for the issue type (see **Body Templates** below), then create the issue using the **native Issue Type field** (not a label) plus any derived effort and priority labels:
+Construct the body from the gathered fields using the template for the issue type (see **Body Templates** below), then create the issue:
 
 ```bash
 gh issue create \
   --title "{title}" \
   --type "{Feature|Task|Bug}" \
-  --label "effort:{low|medium|high}" \       # omit if effort not determined
-  --label "priority:{low|medium|high|urgent}" \  # omit if priority not determined
   --body "$(cat <<'EOF'
 {body}
 EOF
 )"
 ```
+
+Capture the issue URL output and extract the issue number from it.
+
+### Step 6: Set Effort and Priority as Native Issue Fields
+
+Only run this step if you have at least one confident Effort or Priority value to set.
+
+Fetch the org's issue fields to get field IDs and option IDs:
+
+```bash
+OWNER=$(gh repo view --json owner --jq '.owner.login')
+REPO=$(gh repo view --json name --jq '.name')
+gh api /orgs/$OWNER/issue-fields
+```
+
+From the response, find the `id` of the "Priority" and "Effort" fields, and the `id` of the matching option (e.g. "High", "Medium", "Low", "Urgent" — capitalised). If either field does not exist in the org, skip it silently.
+
+Then post the field values to the created issue:
+
+```bash
+gh api --method POST "repos/$OWNER/$REPO/issues/{issue_number}/issue-field-values" \
+  --input - <<'EOF'
+{
+  "issue_field_values": [
+    {"issue_field_id": {priority_field_id}, "value": {priority_option_id}},
+    {"issue_field_id": {effort_field_id}, "value": {effort_option_id}}
+  ]
+}
+EOF
+```
+
+Omit either entry from `issue_field_values` if that field was not determined or does not exist in the org.
 
 Output the issue URL so the user can open it directly.
 
@@ -162,9 +171,9 @@ Do not attempt to create the issue with incomplete data.
 
 1. Parse all provided fields from the invocation.
 2. Validate that every required field for the given type is present.
-3. If `--effort` or `--priority` were supplied, ensure their labels exist (same label creation commands as interactive mode). If neither was supplied, skip label creation.
-4. Compose the body using the template for the issue type (see **Body Templates** below).
-5. Create the issue immediately with no confirmation using `--type` and any supplied `--label "effort:..."` / `--label "priority:..."` flags.
+3. Compose the body using the template for the issue type (see **Body Templates** below).
+4. Create the issue immediately with no confirmation using `--type`.
+5. If `--effort` or `--priority` were supplied, set them as native issue fields (same API steps as interactive Step 6). If neither was supplied, skip.
 6. Output the issue URL.
 
 ---
@@ -214,5 +223,5 @@ Do not attempt to create the issue with incomplete data.
 - The issue title should be concise (under 70 characters) and written in imperative present tense (e.g. "Add dark mode support", "Fix crash on empty list", "Improve onboarding flow").
 - Requirements should be specific enough that a developer can close each one unambiguously.
 - Issue Type is set via `--type` (a native GitHub field), never as a label.
-- Effort and Priority are set as labels (`effort:*`, `priority:*`) when they can be confidently determined — omit them otherwise.
+- Effort and Priority are set as native issue fields via the API, never as labels.
 - Do not add assignees, milestones, or projects unless explicitly requested.
