@@ -166,6 +166,8 @@ Read every finding carefully. Categorise each one:
 - **Should fix** — code quality issue that is non-trivial and worth addressing before merge
 - **Defer** — style preference, speculative concern, or out-of-scope improvement
 
+Record the full categorised list before proceeding — you will need it in Steps 9 and 10.
+
 ### Step 9: Resolve Review Findings
 
 For each **must fix** and **should fix** finding:
@@ -178,37 +180,47 @@ For each **must fix** and **should fix** finding:
 git push
 ```
 
-Re-run a quick sanity check after fixes:
+Then run a low-effort sanity check to confirm no new issues were introduced:
 
 ```
 /code-review low
 ```
 
-Confirm no new issues were introduced.
+When the sanity check is clean, **do not stop**. Proceed immediately to Step 10 without pausing or waiting for input.
 
-#### Raise Issues for Deferred Findings
+### Step 10: Raise Issues for Deferred Findings
 
-For every finding categorised as **defer**, and for every **should fix** finding that was not addressed (e.g. out of scope, risk too high to take before merge), create a GitHub issue immediately using `issue-creator` in auto mode. Do not skip any — every surfaced concern must either be fixed or tracked.
+This step is **mandatory** even when there are zero deferred findings — in that case, simply note "No deferred findings; skipping." and continue to Step 11.
+
+**Default: fix it, don't defer it.** Before creating a deferred issue for any finding, ask: can this be addressed in the current PR without meaningful scope creep or risk? If yes, fix it and commit. A finding should only become a deferred issue if it meets one of these criteria:
+- It requires changes in a different area of the codebase that would significantly expand the PR scope
+- It is genuinely out of scope for the target issue (e.g. a pre-existing problem unrelated to the change)
+- Fixing it now would introduce meaningful risk to the PR (e.g. requires a design decision, architectural change, or data migration)
+- It is a speculative concern with no clear right answer at this point
+
+Style preferences and minor nitpicks that can be addressed in-line should be fixed immediately, not deferred.
+
+For the remaining findings that genuinely cannot be fixed in this PR, create a GitHub issue using the `issue-creator` skill in auto mode. Invoke it with the `Skill` tool (skill name: `issue-creator`). Every surfaced concern must either be fixed or tracked.
 
 Classify each finding as one of:
-- **bug** — something is broken or incorrect (use `--type bug` with `--problem`, `--fix`, `--requirements`)
-- **task** — an improvement, quality concern, or design issue that is not a defect (use `--type task` with `--overview`, `--goal`, `--requirements`)
+- **bug** — something is broken or incorrect
+- **task** — an improvement, quality concern, or design issue that is not a defect
 
-For a deferred bug:
+Pass the following args to the `issue-creator` skill for a deferred bug:
 
 ```
-/issue-creator --auto --type bug --title "{concise imperative title}" --problem "{what is wrong and how it manifests}" --fix "{proposed approach}" --requirements "{list of specific things to do}"
+--auto --type bug --title "{concise imperative title}" --problem "{what is wrong and how it manifests}" --fix "{proposed approach}" --requirements "{list of specific things to do}"
 ```
 
 For a deferred task:
 
 ```
-/issue-creator --auto --type task --title "{concise imperative title}" --overview "Surfaced during code review of PR resolving issue #<number>. {description of the finding and why it was deferred}" --goal "{what resolving this issue would achieve}" --requirements "{list of specific things to do}"
+--auto --type task --title "{concise imperative title}" --overview "Surfaced during code review of PR resolving issue #<number>. {description of the finding and why it was deferred}" --goal "{what resolving this issue would achieve}" --requirements "{list of specific things to do}"
 ```
 
-Collect the URL of each created issue.
+Collect the URL of each created issue. When all deferred issues are created (or when none exist), **proceed immediately to Step 11**.
 
-### Step 10: Open the Pull Request
+### Step 11: Open the Pull Request
 
 Invoke the PR creation skill:
 
