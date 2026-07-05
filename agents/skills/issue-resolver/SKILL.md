@@ -1,5 +1,5 @@
 ---
-name: resolve-issue
+name: issue-resolver
 description: Resolve a GitHub issue end-to-end — understand the issue, evaluate the codebase, plan the implementation, write production-quality code with tests, review and fix, then open a pull request.
 ---
 
@@ -10,7 +10,7 @@ Fully resolve a GitHub issue from first read to open pull request.
 ## Usage
 
 ```
-/resolve-issue <issue-number>
+/issue-resolver <issue-number>
 ```
 
 `<issue-number>` is required. This is the GitHub issue number to resolve.
