@@ -180,13 +180,9 @@ For each **must fix** and **should fix** finding:
 git push
 ```
 
-Then run a low-effort sanity check to confirm no new issues were introduced:
+Then do a quick self-review: run `git diff HEAD~<n>..HEAD` (where `<n>` is the number of fix commits) and read every changed line. Check only for obvious mistakes introduced by the fixes (syntax errors, wrong variable names, missing returns). Do **not** run `/code-review` again — it will return empty output and cause a stall.
 
-```
-/code-review low
-```
-
-When the sanity check is clean, **do not stop**. Proceed immediately to Step 10 without pausing or waiting for input.
+Log one sentence: either "Self-review clean." or "Found X in Y — fixing now." Fix any problems found, commit, and push. Then **proceed immediately to Step 10** without pausing or waiting for input.
 
 ### Step 10: Raise Issues for Deferred Findings
 
