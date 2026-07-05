@@ -154,10 +154,19 @@ git push -u origin HEAD
 
 ### Step 8: Run Code Review
 
-Invoke the code review skill at high effort against the branch diff:
+Choose the review effort level based on the scope of changes:
+
+| Effort | When to use |
+|--------|-------------|
+| `low`  | Single-file bug fixes, trivial additions, <50 lines changed |
+| `medium` | Multi-file changes, small features, 50–200 lines changed |
+| `high` | Cross-cutting changes, new subsystems, complex logic, >200 lines changed |
+| `max`  | Security-sensitive code, payment flows, auth, data migrations, or anything where a missed bug would have serious consequences |
+
+Then invoke the code review skill at the chosen effort level:
 
 ```
-/code-review high
+/code-review <effort>
 ```
 
 Read every finding carefully. Categorise each one:
