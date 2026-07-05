@@ -115,17 +115,17 @@ REPO=$(gh repo view --json name --jq '.name')
 gh api /orgs/$OWNER/issue-fields
 ```
 
-From the response, find the `id` of the "Priority" and "Effort" fields, and the `id` of the matching option (e.g. "High", "Medium", "Low", "Urgent" — capitalised). If either field does not exist in the org, skip it silently.
+From the response, find the `id` of the "Priority" and "Effort" fields. If either field does not exist in the org, skip it silently.
 
-Then post the field values to the created issue:
+Then post the field values to the created issue. The `value` is the option **name as a string** (e.g. `"High"`, `"Medium"`, `"Low"`, `"Urgent"` — capitalised), and the key is `field_id` (not `issue_field_id`):
 
 ```bash
 gh api --method POST "repos/$OWNER/$REPO/issues/{issue_number}/issue-field-values" \
-  --input - <<'EOF'
+  --input - <<EOF
 {
   "issue_field_values": [
-    {"issue_field_id": {priority_field_id}, "value": {priority_option_id}},
-    {"issue_field_id": {effort_field_id}, "value": {effort_option_id}}
+    {"field_id": {priority_field_id}, "value": "High"},
+    {"field_id": {effort_field_id}, "value": "Medium"}
   ]
 }
 EOF
