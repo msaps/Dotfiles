@@ -190,30 +190,20 @@ Confirm no new issues were introduced.
 
 For every finding categorised as **defer**, and for every **should fix** finding that was not addressed (e.g. out of scope, risk too high to take before merge), create a GitHub issue immediately using `issue-creator` in auto mode. Do not skip any — every surfaced concern must either be fixed or tracked.
 
-Map finding categories to issue types:
-- Code quality, design concern, or improvement → `--type enhancement`
-- Correctness risk not blocking this PR → `--type bug`
+Classify each finding as one of:
+- **bug** — something is broken or incorrect (use `--type bug` with `--problem`, `--fix`, `--requirements`)
+- **task** — an improvement, quality concern, or design issue that is not a defect (use `--type task` with `--overview`, `--goal`, `--requirements`)
 
-For each deferred finding, invoke:
-
-```
-/issue-creator --auto \
-  --type enhancement \
-  --title "{concise imperative title}" \
-  --overview "Surfaced during code review of PR resolving issue #<number>. {description of the finding and why it was deferred}" \
-  --goal "{what resolving this issue would achieve}" \
-  --requirements "{list of specific things to do}"
-```
-
-Or for a deferred correctness concern:
+For a deferred bug:
 
 ```
-/issue-creator --auto \
-  --type bug \
-  --title "{concise imperative title}" \
-  --problem "{what is wrong and how it manifests}" \
-  --fix "{proposed approach}" \
-  --requirements "{list of specific things to do}"
+/issue-creator --auto --type bug --title "{concise imperative title}" --problem "{what is wrong and how it manifests}" --fix "{proposed approach}" --requirements "{list of specific things to do}"
+```
+
+For a deferred task:
+
+```
+/issue-creator --auto --type task --title "{concise imperative title}" --overview "Surfaced during code review of PR resolving issue #<number>. {description of the finding and why it was deferred}" --goal "{what resolving this issue would achieve}" --requirements "{list of specific things to do}"
 ```
 
 Collect the URL of each created issue.
