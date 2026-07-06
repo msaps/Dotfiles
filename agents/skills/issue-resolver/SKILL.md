@@ -28,6 +28,12 @@ gh issue view <issue-number> --json number,title,body,labels,comments
 
 Read the issue title, body, all labels, and every comment thread. Treat comments as part of the specification — they often contain clarifications, corrections, or additional requirements that override the original body.
 
+Immediately assign yourself to the issue:
+
+```bash
+gh issue edit <issue-number> --add-assignee @me
+```
+
 Identify and record:
 - **Type**: bug fix, feature, enhancement, or task
 - **Goal**: the single clear outcome this issue wants to achieve
