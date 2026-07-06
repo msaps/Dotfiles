@@ -51,14 +51,14 @@ Create a pull request for the current branch on GitHub.
    )"
    ```
 
-7. **Enable auto-merge if the repo requires it**:
-   - Run `gh api repos/{owner}/{repo}/branches/main/protection` to check branch protection rules
-   - If the response includes `required_status_checks` with contexts, OR `required_pull_request_reviews` with a non-zero `required_approving_review_count`, then auto-merge is safe — enable it with:
+7. **Enable auto-merge**:
+   - Always attempt to enable auto-merge after creating the PR:
      ```bash
      gh pr merge --auto --squash
      ```
-   - If branch protection returns a 404 (no protection) or neither of those fields is present, **skip auto-merge** — the PR would merge immediately with no oversight
-   - Use the repo's default merge strategy if squash is not available (`--merge` or `--rebase` as fallback)
+   - If the command fails because auto-merge is not available (e.g. the repo has no branch protection rules), GitHub will reject it — catch that error and skip silently
+   - If squash is not available, fall back to `--merge` or `--rebase`
+   - Do NOT pre-check branch protection rules via the API — that endpoint requires admin access and returns 404 for non-admins even when protection exists
 
 8. **Return the PR URL** so the user can review it
 
