@@ -107,16 +107,36 @@ The plan must contain:
 
 Log a one-paragraph summary of the plan before proceeding to implementation. Do not wait for confirmation — proceed immediately.
 
-### Step 5: Create a Feature Branch
+### Step 5: Prepare the Workspace
 
-Branch off the default branch using a name derived from the issue:
+Before writing any code, isolate the work in a worktree on a fresh branch cut from the latest default branch. Use a short kebab-case slug (3–5 words max) that describes the issue, not the implementation — reuse the same slug chosen for the plan file in Step 4.
 
-```bash
-git fetch origin
-git checkout -b feature/issue-<number>-<short-slug> origin/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')
-```
+1. **Enter a worktree, if not already in one.** Check whether the session is already inside a worktree (e.g. you were invoked from within `.claude/worktrees/*`, or a prior `EnterWorktree` call already succeeded this session). If not, create one scoped to this issue:
 
-Use a short kebab-case slug (3–5 words max) that describes the issue, not the implementation.
+   ```
+   EnterWorktree(name: "issue-<number>-<short-slug>")
+   ```
+
+   With the default `worktree.baseRef` setting (`fresh`), this branches from `origin/<default-branch>` — which also satisfies "pull the latest changes from main." If `EnterWorktree` is unavailable (e.g. running outside the harness), fall back to plain git:
+
+   ```bash
+   git fetch origin
+   git worktree add ../issue-<number>-<short-slug> -b feature/issue-<number>-<short-slug> origin/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')
+   cd ../issue-<number>-<short-slug>
+   ```
+
+2. **If already in a worktree**, don't create a new one — instead bring the existing one up to date with the default branch:
+
+   ```bash
+   git fetch origin
+   git merge --ff-only origin/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')
+   ```
+
+3. **Ensure the branch is named correctly.** Regardless of which path above was taken, the working branch must end up named `feature/issue-<number>-<short-slug>`:
+
+   ```bash
+   git branch -m feature/issue-<number>-<short-slug>
+   ```
 
 ### Step 6: Implement the Plan
 
@@ -246,12 +266,35 @@ The PR description must include:
 - `Closes #<number>` on its own line so the issue auto-closes on merge
 - A **Follow-up issues** section listing the URL of each issue created from deferred review findings (omit section entirely if none)
 
+Record the PR number and the `owner/repo` slug — Step 12 needs both.
+
+### Step 12: Wait for Merge, Then Clean Up
+
+Do not sit in this session polling for merge status — that burns tokens for no reason. Instead, hand the wait off to a lightweight recurring cron check.
+
+1. Schedule a poll, off the exact half-hour so it doesn't collide with everyone else's cron jobs:
+
+```
+CronCreate(
+  cron: "12,42 * * * *",
+  recurring: true,
+  prompt: "Run `gh pr view <pr-number> --repo <owner>/<repo> --json state,mergedAt`. If mergedAt is set: use CronList to find this job's own id and CronDelete it, then call ExitWorktree(action: 'remove') to delete the worktree and branch, then report the PR merged and the worktree was cleaned up. If state is CLOSED and mergedAt is null: CronDelete this job and report the PR was closed without merging — leave the worktree in place untouched. Otherwise (still OPEN): do nothing and let the job fire again later."
+)
+```
+
+Substitute the actual PR number and `owner/repo` recorded in Step 11.
+
+2. Tell the user the check is scheduled and will fire roughly every 30 minutes. Note the built-in limit: `CronCreate` recurring jobs auto-expire after 7 days. If the PR is still open at that point, the job stops firing and the worktree will need manual cleanup — mention this so it isn't a silent surprise.
+
+3. This is the natural end of the skill's automated work for this issue. Nothing further happens synchronously; the merge check and cleanup complete asynchronously via the scheduled job.
+
 ---
 
 ## Notes
 
-- Never commit directly to `main` or the default branch. Always use a `feature/issue-<number>-*` branch.
+- Never commit directly to `main` or the default branch. Always use a `feature/issue-<number>-*` branch inside its own worktree (see Step 5).
 - Never force-push.
+- Do not call `ExitWorktree` yourself before Step 12 confirms the PR merged. Cleanup happens automatically once the scheduled check in Step 12 detects the merge.
 - Do not address issues or improvements beyond the scope of the target issue. Note them but leave them for separate issues.
 - If CI is configured, check `gh pr checks` after opening the PR and report the result. Do not merge — that is the human's decision.
 - If the issue is already closed, stop and report — do not reopen or implement silently.
