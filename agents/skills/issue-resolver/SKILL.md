@@ -268,25 +268,36 @@ The PR description must include:
 
 Record the PR number and the `owner/repo` slug — Step 12 needs both.
 
-### Step 12: Wait for Merge, Then Clean Up
+### Step 12: Wait for Merge, Resolving PR Comments Along the Way
 
-Do not sit in this session polling for merge status — that burns tokens for no reason. Instead, hand the wait off to a lightweight recurring cron check.
+Do not sit in this session polling for merge status — that burns tokens for no reason. Instead, hand the wait off to a lightweight recurring cron check. On every cycle where the PR is still open, the same job also triages and resolves any new PR comments so feedback doesn't sit unanswered between polls.
 
-1. Schedule a poll, off the exact half-hour so it doesn't collide with everyone else's cron jobs:
+Poll frequency backs off gradually the longer the PR stays open, so early CI/bot/reviewer comments get caught quickly without polling that tightly forever:
+
+| Elapsed since PR opened | Poll interval | Cron |
+|---|---|---|
+| 0–20 min | every 3 min | `*/3 * * * *` |
+| 20 min – 1 hr | every 10 min | `*/10 * * * *` |
+| 1–4 hr | every 20 min | `*/20 * * * *` |
+| 4–24 hr | every 30 min | `*/30 * * * *` |
+| beyond 24 hr | every 2 hr | `17 */2 * * *` |
+
+1. Schedule the first (tightest) tier, and mark it `durable: true` so it survives the CLI/session ending — the whole point of handing this off is that it shouldn't depend on this session staying alive for hours or days:
 
 ```
 CronCreate(
-  cron: "12,42 * * * *",
+  cron: "*/3 * * * *",
   recurring: true,
-  prompt: "Run `gh pr view <pr-number> --repo <owner>/<repo> --json state,mergedAt`. If mergedAt is set: use CronList to find this job's own id and CronDelete it, then call ExitWorktree(action: 'remove') to delete the worktree and branch, then report the PR merged and the worktree was cleaned up. If state is CLOSED and mergedAt is null: CronDelete this job and report the PR was closed without merging — leave the worktree in place untouched. Otherwise (still OPEN): do nothing and let the job fire again later."
+  durable: true,
+  prompt: "Run `gh pr view <pr-number> --repo <owner>/<repo> --json state,mergedAt,createdAt`. If mergedAt is set: use CronList to find this job's own id and CronDelete it, then call ExitWorktree(action: 'remove') to delete the worktree and branch, then report the PR merged and the worktree was cleaned up. If state is CLOSED and mergedAt is null: CronDelete this job and report the PR was closed without merging — leave the worktree in place untouched. Otherwise (still OPEN): invoke the `pr-finalize` skill on PR <pr-number> to fetch outstanding review threads and issue comments, address anything requiring a code change (commit and push), reply to comments that were addressed or asked a question, and resolve threads that are now fully addressed — skip pr-finalize's final sanity-check/code-review step since this runs every cycle. Leave ambiguous, out-of-scope, or still-under-discussion threads open for a human rather than guessing. Then compute minutes elapsed since createdAt and pick the matching tier from this table: 0-20min -> */3 * * * *, 20min-1hr -> */10 * * * *, 1-4hr -> */20 * * * *, 4-24hr -> */30 * * * *, beyond 24hr -> 17 */2 * * *. Use CronList to find this job's own entry (match by the PR number embedded in its prompt) and compare its current cron field to the tier's cron. If they differ, CronDelete this job's id and CronCreate a new job with recurring: true, durable: true, the new tier's cron, and this exact same prompt text (verbatim, so it keeps re-evaluating and stepping down on future fires). If they already match, do nothing and let this same job fire again later."
 )
 ```
 
 Substitute the actual PR number and `owner/repo` recorded in Step 11.
 
-2. Tell the user the check is scheduled and will fire roughly every 30 minutes. Note the built-in limit: `CronCreate` recurring jobs auto-expire after 7 days. If the PR is still open at that point, the job stops firing and the worktree will need manual cleanup — mention this so it isn't a silent surprise.
+2. Tell the user the check is scheduled, will start by polling every 3 minutes and gradually back off to every 2 hours as the PR ages, and will resolve any addressable PR comments as they arrive in addition to watching for merge. Note the built-in limit: `CronCreate` recurring jobs auto-expire after 7 days — since this job recreates itself on every tier change, the 7-day clock resets each time it steps down, so a long-lived PR won't silently stop being polled. If a stretch passes with no tier change for 7 days (only possible in the slowest, >24hr tier), mention that the job will lapse and the worktree will need manual cleanup.
 
-3. This is the natural end of the skill's automated work for this issue. Nothing further happens synchronously; the merge check and cleanup complete asynchronously via the scheduled job.
+3. This is the natural end of the skill's automated work for this issue. Nothing further happens synchronously; comment resolution, the merge check, backoff stepping, and cleanup all complete asynchronously via the scheduled job.
 
 ---
 
