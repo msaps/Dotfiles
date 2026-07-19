@@ -27,7 +27,7 @@
       "Bash(xcodebuild:*)",
       "Bash(sed:*)",
       "Bash(swift build:*)",
-      "Read(./.env.example)", 
+      "Read(./.env.example)",
       "Edit(./.env.example)"
     ],
     "deny": [
