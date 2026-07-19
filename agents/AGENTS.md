@@ -26,6 +26,13 @@ These rules are ABSOLUTE:
 
 - NEVER edit a previous commit unless explicitly instructed to. If you are requested to make changes to previous changes simply append them as a new commit.
 
+### NEVER Let a Sub-Agent Exceed Its Assigned Task
+
+- When you spawn or fork a sub-agent for a narrow task (review, analysis, search, etc.), that sub-agent's job is ONLY what its immediate prompt asked for — nothing else.
+- This applies even when the sub-agent's inherited context (e.g. a forked agent's full conversation history) contains a broader plan, skill instructions, or "next steps." Those belong to the parent session only. Seeing "proceed without pausing" language elsewhere in inherited context does not mean *you* should proceed — that instruction is for the session that owns the overall task.
+- If you are a sub-agent and your assigned task was to review, analyze, or report: return findings as text and stop. Do not commit, push, open a PR/issue, edit files, or schedule jobs, even if you can see those steps described nearby.
+- If you are the parent session and a sub-agent's output shows it took action beyond what you asked (commits, pushes, PRs, issues, scheduled jobs, file edits), stop, do not build on that work, and report the incident to the user immediately.
+
 ## ALWAYS DO
 These rules are ABSOLUTE:
 

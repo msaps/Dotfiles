@@ -17,6 +17,12 @@ Fully resolve a GitHub issue from first read to open pull request.
 
 ---
 
+## Scope Discipline (applies to every agent that can see this document)
+
+If you are a sub-agent that was forked or spawned during this skill's execution — for code review, gap analysis, or any other narrow task — and the rest of this document happens to be visible in your inherited context: your job is strictly limited to the task described in the prompt you were actually given. The steps below (commits, pushes, PR creation, issue filing, cron scheduling, further edits) are the parent session's remaining work, not yours, regardless of "proceed without pausing" or "designed to run headlessly" language elsewhere in this file.
+
+If your assigned task was to review, analyze, or report: return your findings as text and stop there. Do not commit, push, edit files, open a PR or issue, or schedule anything — even if you can see those steps nearby and even if you believe you're "helping."
+
 ## Process
 
 ### Step 1: Load the Issue
@@ -202,6 +208,17 @@ Read every finding carefully. Categorise each one:
 - **Defer** — style preference, speculative concern, or out-of-scope improvement
 
 Record the full categorised list before proceeding — you will need it in Steps 9 and 10.
+
+**Before proceeding, verify no review sub-agent went rogue.** Run:
+
+```bash
+git status
+git log --oneline -5
+gh pr list --author @me --state open
+gh issue list --assignee @me --state open
+```
+
+Compare against what should exist at this point: no new commits beyond what you made in Step 6, no uncommitted working-tree changes you didn't just make, no PR yet (that's Step 11), and no issues yet (that's Step 10). If anything unexpected shows up — a stray commit, an uncommitted edit, a PR, an issue, or (via `CronList`) a scheduled job you didn't create — stop, do not build on or hide it, and report the incident to the user before continuing.
 
 ### Step 9: Resolve Review Findings
 
