@@ -46,3 +46,7 @@ source $ZSH/oh-my-zsh.sh
 fpath=(~/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
+
+# SDKMan
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
