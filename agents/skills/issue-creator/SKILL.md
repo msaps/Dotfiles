@@ -337,6 +337,7 @@ For a Bug-type parent, use `## Problem` / `## Fix` in place of `## Overview` / `
 
 ## Notes
 
+- Whenever a class name or type name is referenced in an issue title or body (e.g. `UserSession`, `ViewController`, `WidgetRepository`), wrap it in backticks so it renders as inline code. This applies to titles, overview/problem/goal text, and requirements — everywhere a type name appears, including in sub-issue titles and bodies.
 - The issue title should be concise (under 70 characters) and written in imperative present tense (e.g. "Add dark mode support", "Fix crash on empty list", "Improve onboarding flow").
 - Requirements should be specific enough that a developer can close each one unambiguously.
 - Issue Type is set via `--type` (a native GitHub field), never as a label.
