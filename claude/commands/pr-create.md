@@ -26,6 +26,7 @@ Create a pull request for the current branch on GitHub.
    - Use imperative present tense (e.g., "Add feature", "Fix bug", "Update docs")
    - Keep under 72 characters
    - Be specific and descriptive
+   - Wrap any class or type name (e.g. `UserSession`, `ViewController`) in backticks so it renders as inline code — this applies to the title as well as the description
 
 5. **Create the PR description** with this structure:
    ```markdown
@@ -67,4 +68,5 @@ Create a pull request for the current branch on GitHub.
 - NEVER merge the PR directly
 - NEVER skip the description - always provide a detailed summary
 - ALWAYS use imperative present tense for the title
+- ALWAYS wrap class/type names in backticks in both the title and description
 - ALWAYS analyze all commits, not just the most recent one

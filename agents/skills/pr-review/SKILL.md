@@ -150,6 +150,7 @@ For each surviving finding, write one short inline comment. This is the part tha
 - One to three sentences. State the problem and, if it's not obvious, why it matters.
 - No confidence scores, no category labels, no restating the file/line (GitHub already shows that).
 - No emoji, no meta-commentary about the review itself, no sign-off.
+- Whenever a class or type name is referenced (e.g. `UserSession`, `ViewController`), wrap it in backticks so it renders as inline code.
 - Where the fix is small and unambiguous, include it as a GitHub suggestion block so it's one-click-appliable:
 
   ```suggestion

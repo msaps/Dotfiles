@@ -149,6 +149,7 @@ Report a clear green light or list any remaining blockers. Do not approve the PR
 
 ## Notes
 
+- Whenever a class or type name is referenced in a reply (e.g. `UserSession`, `ViewController`), wrap it in backticks so it renders as inline code.
 - Never commit directly to `main`. If the PR head branch is somehow `main`, stop and warn.
 - Never force-push.
 - If a comment is ambiguous about whether action is required, err on the side of asking the user rather than guessing.
