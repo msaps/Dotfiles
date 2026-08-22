@@ -47,7 +47,9 @@
       "Bash(curl *)",
       "Read(./.env)",
       "Read(./.env.*)",
-      "Bash(git push --force*)",
+      "Bash(git push --force)",
+      "Bash(git push --force *)",
+      "Bash(git push -f)",
       "Bash(git push -f *)",
       "Bash(git reset --hard*)",
       "Bash(git checkout -- *)",
@@ -56,6 +58,9 @@
       "Bash(gh issue close:*)",
       "Bash(gh issue delete:*)",
       "Bash(gh repo delete:*)"
+    ],
+    "ask": [
+      "Bash(git push --force-with-lease*)"
     ],
     "defaultMode": "auto"
   },
@@ -71,6 +76,21 @@
     "claude-code-setup@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/safe-force-push-check.sh",
+            "if": "Bash(git push*)",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   },
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
