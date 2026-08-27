@@ -3,6 +3,13 @@ set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Remove a broken symlink so mkdir -p can create a real directory in its place
+ensure_dir() {
+    local dir="$1"
+    [ -L "$dir" ] && [ ! -e "$dir" ] && rm "$dir"
+    mkdir -p "$dir"
+}
+
 echo "==> Creating symlinks..."
 
 # ZSH
@@ -28,9 +35,13 @@ ln -sf "$DOTFILES_DIR/gh/config.yml" "$HOME/.config/gh/config.yml"
 
 # AI agents (Claude Code, Codex, etc.)
 echo "==> Setting up AI agents..."
-mkdir -p "$HOME/.agents" "$HOME/.agents/skills" "$HOME/.agents/agents"
-mkdir -p "$HOME/.claude" "$HOME/.claude/skills" "$HOME/.claude/agents"
-mkdir -p "$HOME/.codex"
+ensure_dir "$HOME/.agents"
+ensure_dir "$HOME/.agents/skills"
+ensure_dir "$HOME/.agents/agents"
+ensure_dir "$HOME/.claude"
+ensure_dir "$HOME/.claude/skills"
+ensure_dir "$HOME/.claude/agents"
+ensure_dir "$HOME/.codex"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
