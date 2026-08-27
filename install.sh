@@ -42,8 +42,6 @@ if ! command -v brew &>/dev/null; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
-mkdir -p "$HOME/.homebrew"
-ln -sf "$DOTFILES_DIR/homebrew/brew.env" "$HOME/.homebrew/brew.env"
 
 # Install packages from Brewfile (skip if no write access)
 BREW_PREFIX="$(brew --prefix)"
@@ -74,56 +72,7 @@ if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 fi
 
-# Create symlinks
-echo "==> Creating symlinks..."
-
-# ZSH
-ln -sf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/zsh/.zshenv" "$HOME/.zshenv"
-ln -sf "$DOTFILES_DIR/zsh/.profile" "$HOME/.profile"
-
-# Git
-ln -sf "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
-ln -sf "$DOTFILES_DIR/git/.gitignore" "$HOME/.gitignore"
-
-# Misc
-ln -sf "$DOTFILES_DIR/misc/.curlrc" "$HOME/.curlrc"
-ln -sf "$DOTFILES_DIR/tmux.conf" "$HOME/.tmux.conf"
-
-# AI agents (Claude Code, Codex, etc.)
-echo "==> Setting up AI agents..."
-mkdir -p "$HOME/.agents"
-ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
-mkdir -p "$HOME/.agents/skills"
-mkdir -p "$HOME/.claude"
-ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
-ln -sfn "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
-ln -sfn "$DOTFILES_DIR/claude/hooks" "$HOME/.claude/hooks"
-ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
-mkdir -p "$HOME/.claude/skills"
-mkdir -p "$HOME/.codex"
-ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
-ln -sfn "$DOTFILES_DIR/codex/prompts" "$HOME/.codex/prompts"
-ln -sfn "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
-# Symlink each skill individually so external tools can add skills alongside
-for skill_dir in "$DOTFILES_DIR/agents/skills"/*/; do
-    skill_name=$(basename "$skill_dir")
-    ln -sfn "$skill_dir" "$HOME/.agents/skills/$skill_name"
-    ln -sfn "$skill_dir" "$HOME/.claude/skills/$skill_name"
-done
-# Symlink each agent individually so external tools can add agents alongside
-mkdir -p "$HOME/.agents/agents"
-mkdir -p "$HOME/.claude/agents"
-for agent_file in "$DOTFILES_DIR/agents/agents"/*.md; do
-    [ -f "$agent_file" ] || continue
-    agent_name=$(basename "$agent_file")
-    ln -sf "$agent_file" "$HOME/.agents/agents/$agent_name"
-    ln -sf "$agent_file" "$HOME/.claude/agents/$agent_name"
-done
-
-# GitHub CLI
-mkdir -p "$HOME/.config/gh"
-ln -sf "$DOTFILES_DIR/gh/config.yml" "$HOME/.config/gh/config.yml"
+bash "$DOTFILES_DIR/link.sh"
 
 # Install iTerm2 fonts
 echo "==> Installing iTerm2 fonts..."
