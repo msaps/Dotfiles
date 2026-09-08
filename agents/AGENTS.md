@@ -46,5 +46,5 @@ These rules are ABSOLUTE:
 When using PLAN MODE always follow these rules:
 
 ## ALWAYS DO
-- Write the plan to a /plans directory in the project AI agent folder (e.g. ~/.claude/plans).
+- Write the plan to `~/.agents/plans` so it is available regardless of which coding agent is active.
 - Name the plan with a sensible name related to what the aim is.

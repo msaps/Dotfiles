@@ -2,3 +2,11 @@
 .claude/
 *.local.json
 Gemfile.lock
+
+# Secrets and machine-local environment files
+.env
+.env.*
+!.env.example
+
+# macOS metadata
+.DS_Store
