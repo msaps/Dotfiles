@@ -43,6 +43,7 @@ ensure_dir "$HOME/.claude"
 ensure_dir "$HOME/.claude/skills"
 ensure_dir "$HOME/.claude/agents"
 ensure_dir "$HOME/.codex"
+ensure_dir "$HOME/.codex/agents"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
@@ -69,6 +70,13 @@ for agent_file in "$DOTFILES_DIR/agents/agents"/*.md; do
     agent_name=$(basename "$agent_file")
     ln -sf "$agent_file" "$HOME/.agents/agents/$agent_name"
     ln -sf "$agent_file" "$HOME/.claude/agents/$agent_name"
+done
+# Codex custom agents use TOML configuration rather than Claude's Markdown
+# frontmatter, so install the small client-specific adapters separately.
+for agent_file in "$DOTFILES_DIR/codex/agents"/*.toml; do
+    [ -f "$agent_file" ] || continue
+    agent_name=$(basename "$agent_file")
+    ln -sf "$agent_file" "$HOME/.codex/agents/$agent_name"
 done
 
 echo "==> Linking complete!"
