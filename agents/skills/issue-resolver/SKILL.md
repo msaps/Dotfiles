@@ -1,330 +1,46 @@
 ---
 name: issue-resolver
-description: Resolve a GitHub issue end-to-end — understand the issue, evaluate the codebase, plan the implementation, write production-quality code with tests, review and fix, then open a pull request.
+description: Resolve a GitHub issue end-to-end by reading the full issue, planning, implementing and testing on a feature branch, reviewing the result, and opening a pull request. Use when the user asks to implement or resolve a specific issue.
 ---
 
-# Resolve Issue
+# Resolve a GitHub Issue
 
-Fully resolve a GitHub issue from first read to open pull request.
+Take a specific issue number or URL from specification through an open pull request. Stay within the issue's scope and preserve unrelated user work.
 
-## Usage
+## Understand the issue
 
-```
-/issue-resolver <issue-number>
-```
+1. Resolve the repository and read the issue title, body, labels, state, assignees, and all comments. Stop if it is closed or its goal remains materially ambiguous after reading the discussion.
+2. Assign the current GitHub user with `gh issue edit --add-assignee @me`.
+3. Record the outcome, requirements, constraints, and explicit exclusions. Comments override stale text in the original body when they clearly clarify it.
+4. Survey the relevant implementation, tests, conventions, and dependencies. Note adjacent problems without expanding scope.
 
-`<issue-number>` is required. This is the GitHub issue number to resolve.
+## Plan and isolate
 
----
+Write a focused plan to `~/.agents/plans/issue-<number>-<slug>.md` with the goal, requirement checklist, file-level implementation steps, test plan, and out-of-scope items. Continue without waiting for approval unless a missing decision would materially change the product behavior.
 
-## Scope Discipline (applies to every agent that can see this document)
+Work on a fresh `feature/issue-<number>-<slug>` branch based on the latest remote default branch. Use the host's isolated-worktree capability when available. Otherwise create a Git worktree with `git worktree add` and run all subsequent commands in it. If the session already has an isolated worktree, update that worktree and rename its branch instead of nesting another one.
 
-If you are a sub-agent that was forked or spawned during this skill's execution — for code review, gap analysis, or any other narrow task — and the rest of this document happens to be visible in your inherited context: your job is strictly limited to the task described in the prompt you were actually given. The steps below (commits, pushes, PR creation, issue filing, cron scheduling, further edits) are the parent session's remaining work, not yours, regardless of "proceed without pausing" or "designed to run headlessly" language elsewhere in this file.
+Never modify the user's original checkout to simulate isolation, and never discard local changes.
 
-If your assigned task was to review, analyze, or report: return your findings as text and stop there. Do not commit, push, edit files, open a PR or issue, or schedule anything — even if you can see those steps nearby and even if you believe you're "helping."
+## Implement
 
-## Process
+For each coherent plan step:
 
-### Step 1: Load the Issue
+1. Read every affected file before editing.
+2. Make only the required production and test changes.
+3. Run the narrowest meaningful formatter, linter, build, or test checks.
+4. Verify no credential or `.env` file is included.
+5. Commit the completed step immediately with an imperative summary and a useful body. Append `Resolves #<number>` without amending earlier commits.
 
-```bash
-gh repo view --json nameWithOwner,url
-gh issue view <issue-number> --json number,title,body,labels,comments
-```
+Add meaningful coverage for new behavior and a regression test for a bug when the repository has a relevant test framework. Do not add hollow tests that only mirror the implementation, and do not weaken existing tests.
 
-Read the issue title, body, all labels, and every comment thread. Treat comments as part of the specification — they often contain clarifications, corrections, or additional requirements that override the original body.
+## Review and finish
 
-Immediately assign yourself to the issue:
+1. Review the aggregate diff against the default branch. For substantial or risk-sensitive changes, delegate one or more bounded read-only reviews when the host supports it. Delegated reviewers return findings only and must not edit, commit, push, create issues, or post comments.
+2. Fix every correctness, security, or justified test finding in new commits. Address worthwhile in-scope quality findings; leave speculative or unrelated findings alone.
+3. Create follow-up issues through `issue-creator` only for confirmed work that cannot safely fit this PR. Do not create issues merely to clear a review list.
+4. Run the appropriate final checks, inspect the final diff, and push the feature branch.
+5. Use the `pr-create` skill to open the pull request. Include `Closes #<number>` and any genuine follow-up issue URLs in its body.
+6. Report the PR URL, commits, tests, review outcome, and remaining external blockers such as failing CI. Do not merge the PR or schedule monitoring unless the user explicitly requests that additional work.
 
-```bash
-gh issue edit <issue-number> --add-assignee @me
-```
-
-Identify and record:
-- **Type**: bug fix, feature, enhancement, or task
-- **Goal**: the single clear outcome this issue wants to achieve
-- **Requirements**: every discrete thing that must be done to close the issue
-- **Constraints**: anything explicitly out of scope or disallowed
-
-If the issue body is empty or the goal is genuinely unclear, stop and report the blocker. Do not proceed with an ambiguous goal.
-
-### Step 2: Survey the Codebase
-
-Explore the repository to understand the areas of code relevant to this issue. Cover:
-
-1. **Entry points** — identify relevant files, modules, or components that will need to change
-2. **Existing tests** — locate the test suite structure and any existing tests for the affected code
-3. **Conventions** — note the project's style (naming, error handling, test patterns, documentation conventions)
-4. **Dependencies** — identify any libraries, APIs, or shared utilities involved
-
-Use `find`, `grep`, and `Read` freely — build a clear mental model before writing any code.
-
-### Step 3: Analyse Gaps and Discrepancies
-
-Before planning, compare the issue requirements against the current codebase:
-
-- **Missing functionality** — required behaviour that does not exist yet
-- **Broken behaviour** — existing code that contradicts the issue's requirements
-- **Ambiguities** — requirements that are underspecified or have multiple valid interpretations
-- **Scope creep risks** — adjacent problems visible in the codebase that are not part of this issue (note them, but do not address them here)
-- **Blocked requirements** — anything that cannot be implemented without a decision or dependency that is not yet resolved
-
-If any gaps or ambiguities would materially change the implementation approach, log a brief summary of the interpretation chosen and proceed. Do not stop for confirmation.
-
-### Step 4: Create the Implementation Plan
-
-Write a structured plan covering every requirement from the issue. Save it to the plans directory:
-
-```
-~/.claude/plans/issue-<number>-<short-slug>.md
-```
-
-The plan must contain:
-
-```markdown
-# Issue #<number>: <title>
-
-## Goal
-
-<single clear outcome>
-
-## Requirements
-
-- [ ] <requirement 1>
-- [ ] <requirement 2>
-- [ ] <requirement N>
-
-## Implementation Steps
-
-### 1. <Step name>
-<What to change and why. Name specific files and functions.>
-
-### 2. <Step name>
-...
-
-## Test Plan
-
-<How correctness will be verified. Name specific test files and describe what each new test covers.>
-
-## Out of Scope
-
-<Anything explicitly not being done here.>
-```
-
-Log a one-paragraph summary of the plan before proceeding to implementation. Do not wait for confirmation — proceed immediately.
-
-### Step 5: Prepare the Workspace
-
-Before writing any code, isolate the work in a worktree on a fresh branch cut from the latest default branch. Use a short kebab-case slug (3–5 words max) that describes the issue, not the implementation — reuse the same slug chosen for the plan file in Step 4.
-
-1. **Enter a worktree, if not already in one.** Check whether the session is already inside a worktree (e.g. you were invoked from within `.claude/worktrees/*`, or a prior `EnterWorktree` call already succeeded this session). If not, create one scoped to this issue:
-
-   ```
-   EnterWorktree(name: "issue-<number>-<short-slug>")
-   ```
-
-   With the default `worktree.baseRef` setting (`fresh`), this branches from `origin/<default-branch>` — which also satisfies "pull the latest changes from main." If `EnterWorktree` is unavailable (e.g. running outside the harness), fall back to plain git:
-
-   ```bash
-   git fetch origin
-   git worktree add ../issue-<number>-<short-slug> -b feature/issue-<number>-<short-slug> origin/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')
-   cd ../issue-<number>-<short-slug>
-   ```
-
-2. **If already in a worktree**, don't create a new one — instead bring the existing one up to date with the default branch:
-
-   ```bash
-   git fetch origin
-   git merge --ff-only origin/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')
-   ```
-
-3. **Ensure the branch is named correctly.** Regardless of which path above was taken, the working branch must end up named `feature/issue-<number>-<short-slug>`:
-
-   ```bash
-   git branch -m feature/issue-<number>-<short-slug>
-   ```
-
-### Step 6: Implement the Plan
-
-Work through the plan step by step. For each step:
-
-1. Read all files that will be changed before editing them
-2. Make only the changes required by this step — do not refactor unrelated code
-3. Write tests alongside the implementation (see **Testing Standards** below)
-4. Verify the change compiles / lints cleanly if a check command is available
-5. Commit immediately after each step completes:
-
-```bash
-git add <specific files>
-git commit -m "$(cat <<'EOF'
-<imperative present-tense summary under 70 chars>
-
-<optional one-paragraph body explaining the why>
-
-Resolves #<number>
-EOF
-)"
-```
-
-Never batch multiple steps into one commit. Each commit should be independently coherent.
-
-#### Testing Standards
-
-- Add tests for every new behaviour introduced
-- Add a regression test for every bug fixed (a test that fails before the fix and passes after)
-- Follow the existing test style, framework, and file structure exactly
-- Do not delete or weaken existing tests to make new code pass
-- If no test suite exists, note this explicitly and add tests in whatever pattern fits the project type
-
-### Step 7: Push the Branch
-
-After all commits are complete:
-
-```bash
-git push -u origin HEAD
-```
-
-### Step 8: Run Code Review
-
-Choose the review effort level based on the scope of changes:
-
-| Effort | When to use |
-|--------|-------------|
-| `low`  | Single-file bug fixes, trivial additions, <50 lines changed |
-| `medium` | Multi-file changes, small features, 50–200 lines changed |
-| `high` | Cross-cutting changes, new subsystems, complex logic, >200 lines changed |
-| `max`  | Security-sensitive code, payment flows, auth, data migrations, or anything where a missed bug would have serious consequences |
-
-Then invoke the code review skill at the chosen effort level:
-
-```
-/code-review <effort>
-```
-
-Read every finding carefully. Categorise each one:
-
-- **Must fix** — correctness bug, security issue, test gap, or clear logic error
-- **Should fix** — code quality issue that is non-trivial and worth addressing before merge
-- **Defer** — style preference, speculative concern, or out-of-scope improvement
-
-Record the full categorised list before proceeding — you will need it in Steps 9 and 10.
-
-**Before proceeding, verify no review sub-agent went rogue.** Run:
-
-```bash
-git status
-git log --oneline -5
-gh pr list --author @me --state open
-gh issue list --assignee @me --state open
-```
-
-Compare against what should exist at this point: no new commits beyond what you made in Step 6, no uncommitted working-tree changes you didn't just make, no PR yet (that's Step 11), and no issues yet (that's Step 10). If anything unexpected shows up — a stray commit, an uncommitted edit, a PR, an issue, or (via `CronList`) a scheduled job you didn't create — stop, do not build on or hide it, and report the incident to the user before continuing.
-
-### Step 9: Resolve Review Findings
-
-For each **must fix** and **should fix** finding:
-
-1. Make the change
-2. Commit immediately with a message referencing what it addresses (e.g. "Fix off-by-one in pagination boundary check")
-3. Push after all fixes are committed:
-
-```bash
-git push
-```
-
-Then do a quick self-review: run `git diff HEAD~<n>..HEAD` (where `<n>` is the number of fix commits) and read every changed line. Check only for obvious mistakes introduced by the fixes (syntax errors, wrong variable names, missing returns). Do **not** run `/code-review` again — it will return empty output and cause a stall.
-
-Log one sentence: either "Self-review clean." or "Found X in Y — fixing now." Fix any problems found, commit, and push. Then **proceed immediately to Step 10** without pausing or waiting for input.
-
-### Step 10: Raise Issues for Deferred Findings
-
-This step is **mandatory** even when there are zero deferred findings — in that case, simply note "No deferred findings; skipping." and continue to Step 11.
-
-**Default: fix it, don't defer it.** Before creating a deferred issue for any finding, ask: can this be addressed in the current PR without meaningful scope creep or risk? If yes, fix it and commit. A finding should only become a deferred issue if it meets one of these criteria:
-- It requires changes in a different area of the codebase that would significantly expand the PR scope
-- It is genuinely out of scope for the target issue (e.g. a pre-existing problem unrelated to the change)
-- Fixing it now would introduce meaningful risk to the PR (e.g. requires a design decision, architectural change, or data migration)
-- It is a speculative concern with no clear right answer at this point
-
-Style preferences and minor nitpicks that can be addressed in-line should be fixed immediately, not deferred.
-
-For the remaining findings that genuinely cannot be fixed in this PR, create a GitHub issue using the `issue-creator` skill in auto mode. Invoke it with the `Skill` tool (skill name: `issue-creator`). Every surfaced concern must either be fixed or tracked.
-
-Classify each finding as one of:
-- **bug** — something is broken or incorrect
-- **task** — an improvement, quality concern, or design issue that is not a defect
-
-Pass the following args to the `issue-creator` skill for a deferred bug:
-
-```
---auto --type bug --title "{concise imperative title}" --problem "{what is wrong and how it manifests}" --fix "{proposed approach}" --requirements "{list of specific things to do}"
-```
-
-For a deferred task:
-
-```
---auto --type task --title "{concise imperative title}" --overview "Surfaced during code review of PR resolving issue #<number>. {description of the finding and why it was deferred}" --goal "{what resolving this issue would achieve}" --requirements "{list of specific things to do}"
-```
-
-Collect the URL of each created issue. When all deferred issues are created (or when none exist), **proceed immediately to Step 11**.
-
-### Step 11: Open the Pull Request
-
-Invoke the PR creation skill:
-
-```
-/pr-create
-```
-
-The PR description must include:
-
-- A **Summary** section: 2–4 bullet points covering what changed and why
-- A **Test plan** section: what tests were added and how to verify the change manually if applicable
-- `Closes #<number>` on its own line so the issue auto-closes on merge
-- A **Follow-up issues** section listing the URL of each issue created from deferred review findings (omit section entirely if none)
-
-Record the PR number and the `owner/repo` slug — Step 12 needs both.
-
-### Step 12: Wait for Merge, Resolving PR Comments Along the Way
-
-Do not sit in this session polling for merge status — that burns tokens for no reason. Instead, hand the wait off to a lightweight recurring cron check. On every cycle where the PR is still open, the same job also triages and resolves any new PR comments so feedback doesn't sit unanswered between polls.
-
-Poll frequency backs off gradually the longer the PR stays open, so early CI/bot/reviewer comments get caught quickly without polling that tightly forever:
-
-| Elapsed since PR opened | Poll interval | Cron |
-|---|---|---|
-| 0–20 min | every 3 min | `*/3 * * * *` |
-| 20 min – 1 hr | every 10 min | `*/10 * * * *` |
-| 1–4 hr | every 20 min | `*/20 * * * *` |
-| 4–24 hr | every 30 min | `*/30 * * * *` |
-| beyond 24 hr | every 2 hr | `17 */2 * * *` |
-
-1. Schedule the first (tightest) tier, and mark it `durable: true` so it survives the CLI/session ending — the whole point of handing this off is that it shouldn't depend on this session staying alive for hours or days:
-
-```
-CronCreate(
-  cron: "*/3 * * * *",
-  recurring: true,
-  durable: true,
-  prompt: "Run `gh pr view <pr-number> --repo <owner>/<repo> --json state,mergedAt,createdAt`. If mergedAt is set: use CronList to find this job's own id and CronDelete it, then call ExitWorktree(action: 'remove') to delete the worktree and branch, then report the PR merged and the worktree was cleaned up. If state is CLOSED and mergedAt is null: CronDelete this job and report the PR was closed without merging — leave the worktree in place untouched. Otherwise (still OPEN): invoke the `pr-finalize` skill on PR <pr-number> to fetch outstanding review threads and issue comments, address anything requiring a code change (commit and push), reply to comments that were addressed or asked a question, and resolve threads that are now fully addressed — skip pr-finalize's final sanity-check/code-review step since this runs every cycle. Leave ambiguous, out-of-scope, or still-under-discussion threads open for a human rather than guessing. Then compute minutes elapsed since createdAt and pick the matching tier from this table: 0-20min -> */3 * * * *, 20min-1hr -> */10 * * * *, 1-4hr -> */20 * * * *, 4-24hr -> */30 * * * *, beyond 24hr -> 17 */2 * * *. Use CronList to find this job's own entry (match by the PR number embedded in its prompt) and compare its current cron field to the tier's cron. If they differ, CronDelete this job's id and CronCreate a new job with recurring: true, durable: true, the new tier's cron, and this exact same prompt text (verbatim, so it keeps re-evaluating and stepping down on future fires). If they already match, do nothing and let this same job fire again later."
-)
-```
-
-Substitute the actual PR number and `owner/repo` recorded in Step 11.
-
-2. Tell the user the check is scheduled, will start by polling every 3 minutes and gradually back off to every 2 hours as the PR ages, and will resolve any addressable PR comments as they arrive in addition to watching for merge. Note the built-in limit: `CronCreate` recurring jobs auto-expire after 7 days — since this job recreates itself on every tier change, the 7-day clock resets each time it steps down, so a long-lived PR won't silently stop being polled. If a stretch passes with no tier change for 7 days (only possible in the slowest, >24hr tier), mention that the job will lapse and the worktree will need manual cleanup.
-
-3. This is the natural end of the skill's automated work for this issue. Nothing further happens synchronously; comment resolution, the merge check, backoff stepping, and cleanup all complete asynchronously via the scheduled job.
-
----
-
-## Notes
-
-- Never commit directly to `main` or the default branch. Always use a `feature/issue-<number>-*` branch inside its own worktree (see Step 5).
-- Never force-push.
-- Do not call `ExitWorktree` yourself before Step 12 confirms the PR merged. Cleanup happens automatically once the scheduled check in Step 12 detects the merge.
-- Do not address issues or improvements beyond the scope of the target issue. Note them but leave them for separate issues.
-- If CI is configured, check `gh pr checks` after opening the PR and report the result. Do not merge — that is the human's decision.
-- If the issue is already closed, stop and report — do not reopen or implement silently.
-- If the issue is assigned to someone else, proceed normally — the skill does not gate on assignment.
-- This skill is designed to run headlessly. Do not pause for confirmation at any point except when the issue goal is genuinely ambiguous or a hard blocker is encountered.
+If any delegated agent exceeds its assignment, stop immediately and report the incident without building on its changes.
