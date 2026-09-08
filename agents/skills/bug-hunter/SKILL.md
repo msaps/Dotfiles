@@ -1,114 +1,44 @@
 ---
 name: bug-hunter
-description: Autonomously hunts for bugs and performance issues across a codebase by running three specialist sub-agents in parallel (regression, long-standing, and performance). Creates GitHub issues for confirmed findings. Designed to run in autonomous loops.
+description: Audit a GitHub codebase for recent regressions, latent correctness bugs, and concrete performance risks by delegating three read-only analyses in parallel, then create issues for confirmed findings. Use when the user explicitly asks for a bug hunt or autonomous audit.
 ---
 
 # Bug Hunter
 
-Run three specialist agents in parallel to find regressions, long-standing bugs, and performance issues across the current repository, then raise GitHub issues for every confirmed finding.
+Run one bounded audit of the current repository. The analysis is read-only; the parent agent owns deduplication and GitHub issue creation.
 
-## Usage
+## Preflight
 
-```
-/bug-hunter
-```
+Confirm that the working directory is a Git repository, `gh repo view` resolves a GitHub remote, and `gh auth status` succeeds. Stop with the actionable error if any check fails.
 
-No arguments required. The skill is designed to run unattended in an autonomous loop.
+## Parallel analysis
 
-## Process
+Delegate these three tasks concurrently and wait for all of them:
 
-### Step 1: Verify the Repository
+1. `regression-bug-hunter`: inspect roughly the latest 10–15 commits for introduced defects and missing regression coverage.
+2. `longstanding-bug-hunter`: inspect core code and error paths for older, reproducible correctness problems.
+3. `performance-bug-hunter`: identify concrete performance or scaling failures appropriate to the project's actual workload.
 
-```bash
-gh repo view --json nameWithOwner,url
-git status
-```
+Use the named custom agents when the host exposes them. Otherwise spawn general read-only subagents with the task text above plus the output contract below. Each delegated task is analysis-only: it must not edit files, commit, push, create issues, or perform any other external mutation.
 
-Confirm this is a GitHub repository with a remote. If not, stop and report.
+Each finding must include `[BUG]` or `[PERFORMANCE]`, severity, file and line, evidence, impact, a concrete fix, and testable requirements. `NO_FINDINGS` means that task found nothing defensible.
 
-### Step 2: Run the Three Specialist Agents in Parallel
+## Validate and deduplicate
 
-Spawn all three agents simultaneously using the Agent tool. Do not wait for one before starting the others — launch all three at the same time:
+1. Discard speculative, style-only, and low-impact findings unless they affect authentication, payments, privacy, or data integrity.
+2. Verify each surviving finding against the repository. Do not rely on a subagent's conclusion without checking its evidence.
+3. Merge findings with the same root cause.
+4. Read up to 200 open GitHub issues and skip substantially equivalent reports.
 
-1. **Agent type: `regression-bug-hunter`**
-   Prompt: "Analyse this repository for bugs introduced by recent commits. Focus on the last 10–15 commits. Return findings in the specified format."
+## Create issues
 
-2. **Agent type: `longstanding-bug-hunter`**
-   Prompt: "Audit this repository for long-standing latent bugs. Do a broad analysis of the codebase, focusing on core business logic, error handling, and common bug patterns. Return findings in the specified format."
+Use the `issue-creator` skill in automatic mode for each remaining finding:
 
-3. **Agent type: `performance-bug-hunter`**
-   Prompt: "Analyse this repository for performance problems and future scaling concerns. Identify the project type first to tailor your analysis. Return findings in the specified format."
+- Map `[BUG]` to native issue type `bug`, using the finding's problem, fix, and requirements.
+- Map `[PERFORMANCE]` to native issue type `task`, using the performance context as the overview and the proposed outcome as the goal.
 
-Wait for all three to complete before proceeding.
+Issue creation is authorized by an explicit bug-hunter request. If required fields are missing, skip that finding and report why instead of inventing details. Do not edit the repository.
 
-### Step 3: Parse and Collect Findings
+## Report
 
-Collect all findings from the three agent responses. Each finding has a type prefix: `[BUG]` or `[PERFORMANCE]`.
-
-Discard any agent response that returned `NO_FINDINGS`. If all three returned `NO_FINDINGS`, log a single message: "Bug hunter found no issues this run." and stop.
-
-### Step 4: Deduplicate
-
-Compare findings across agents. If two or more agents reported what is clearly the same underlying issue (same file, same line, same root cause), keep only the most detailed version. Do not create duplicate issues.
-
-### Step 5: Check for Existing Open Issues
-
-```bash
-gh issue list --state open --limit 200 --json title
-```
-
-For each finding, check whether an open issue with a substantially similar title already exists. If one does, skip that finding — do not create a duplicate.
-
-### Step 6: Create GitHub Issues
-
-For each remaining finding, create an issue using the `issue-creator` skill in auto mode. Do not ask for user confirmation — this skill is designed for autonomous operation.
-
-Map finding types to the appropriate issue-creator type:
-- `[BUG]` → `--type bug`
-- `[PERFORMANCE]` → `--type enhancement`
-
-For each `[BUG]` finding, invoke:
-
-```
-/issue-creator --auto \
-  --type bug \
-  --title "{title}" \
-  --problem "{problem from finding}" \
-  --fix "{fix from finding}" \
-  --requirements "{requirements list from finding}"
-```
-
-For each `[PERFORMANCE]` finding, invoke:
-
-```
-/issue-creator --auto \
-  --type enhancement \
-  --title "{title}" \
-  --overview "{context and problem from finding}" \
-  --goal "Resolve the identified performance concern before it impacts users or becomes harder to fix at scale." \
-  --requirements "{requirements list from finding}"
-```
-
-If issue-creator returns an auto mode error (missing fields), log the error and skip that finding rather than stopping the whole run.
-
-### Step 7: Report
-
-After all issues are created, output a concise summary:
-
-```
-Bug hunter run complete.
-- Regression findings: N
-- Long-standing findings: N  
-- Performance findings: N
-- Issues created: N
-- Issues skipped (already open): N
-```
-
-Include the URL of each newly created issue.
-
-## Notes
-
-- This skill is designed to run in autonomous loops — it creates issues without user confirmation.
-- Severity is for internal triage; all findings above `Low` severity should be raised as issues. Skip `Low` severity findings unless they are in a particularly sensitive area (auth, payments, data integrity).
-- Do not raise issues for code style, formatting preferences, or purely speculative future problems.
-- Do not edit any files during this skill. It is strictly read and report.
+Return counts for each analysis, issues created, duplicates skipped, rejected findings, and the URL of every new issue. If nothing survives validation, say `Bug hunter found no confirmed issues.`
