@@ -29,7 +29,7 @@ cd ~/.dotfiles
 - Global Git config and ignore rules
 - Homebrew environment and package list
 - GitHub CLI config
-- Claude and Codex local agent configuration
+- Shared Claude Code and Codex skills, instructions, and specialist agents
 - iTerm fonts and profile export
 - A few machine-level helper files such as `.curlrc`
 
@@ -50,7 +50,12 @@ Some tools still require interactive setup after the script finishes:
 1. Restart the shell or run `exec zsh`.
 2. Import [`iterm/iterm-profiles.json`](~/.dotfiles/iterm/iterm-profiles.json) into iTerm2 if you want the saved profile.
 3. Run `gh auth login`.
-4. Launch Claude and Codex and complete any first-run authentication.
+4. Launch Claude Code and Codex and complete any first-run authentication.
+
+Codex keeps its generated `~/.codex/config.toml` under application control. This
+repository manages durable Codex command policy in `codex/rules/` and custom
+agent definitions in `codex/agents/`, while shared workflows live in
+`agents/skills/`.
 
 ## Updating
 

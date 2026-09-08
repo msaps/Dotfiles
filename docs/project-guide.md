@@ -26,9 +26,9 @@ The top-level directories are organized by target tool rather than by automation
 | [`git/`](/Users/msaps/.dotfiles/git) | Global Git config and ignore rules |
 | [`homebrew/`](/Users/msaps/.dotfiles/homebrew) | Homebrew environment file |
 | [`gh/`](/Users/msaps/.dotfiles/gh) | GitHub CLI config |
-| [`claude/`](/Users/msaps/.dotfiles/claude) | Claude configuration and custom commands |
-| [`codex/`](/Users/msaps/.dotfiles/codex) | Codex configuration and custom commands |
-| [`agents/`](/Users/msaps/.dotfiles/agents) | Shared agent instructions symlinked into local AI tool directories |
+| [`claude/`](/Users/msaps/.dotfiles/claude) | Claude Code settings and hooks |
+| [`codex/`](/Users/msaps/.dotfiles/codex) | Codex execution rules and custom-agent adapters |
+| [`agents/`](/Users/msaps/.dotfiles/agents) | Shared instructions, skills, and specialist-agent prompts |
 | [`misc/`](/Users/msaps/.dotfiles/misc) | Small standalone dotfiles such as `.curlrc` |
 | [`iterm/`](/Users/msaps/.dotfiles/iterm) | Fonts plus exported iTerm profile |
 
@@ -62,11 +62,12 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 | [`misc/.curlrc`](/Users/msaps/.dotfiles/misc/.curlrc) | `~/.curlrc` |
 | [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) | `~/.agents/AGENTS.md` |
 | [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) | `~/.claude/CLAUDE.md` |
-| [`claude/commands`](/Users/msaps/.dotfiles/claude/commands) | `~/.claude/commands` |
 | [`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) | `~/.claude/settings.json` |
 | [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) | `~/.codex/AGENTS.md` |
-| [`codex/commands`](/Users/msaps/.dotfiles/codex/commands) | `~/.codex/commands` |
-| [`codex/config.toml`](/Users/msaps/.dotfiles/codex/config.toml) | `~/.codex/config.toml` |
+| Each directory in [`agents/skills`](/Users/msaps/.dotfiles/agents/skills) | `~/.agents/skills/<name>` and `~/.claude/skills/<name>` |
+| Each file in [`agents/agents`](/Users/msaps/.dotfiles/agents/agents) | `~/.agents/agents/<name>.md` and `~/.claude/agents/<name>.md` |
+| Each file in [`codex/agents`](/Users/msaps/.dotfiles/codex/agents) | `~/.codex/agents/<name>.toml` |
+| [`codex/rules`](/Users/msaps/.dotfiles/codex/rules) | `~/.codex/rules` |
 | [`gh/config.yml`](/Users/msaps/.dotfiles/gh/config.yml) | `~/.config/gh/config.yml` |
 
 ## What Each Area Configures
@@ -102,11 +103,11 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 
 ### AI Tooling
 
-[`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) is shared between Claude and Codex so both tools inherit the same local working rules.
+[`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) is shared between Claude Code and Codex so both tools inherit the same local working rules. Reusable workflows use the open `SKILL.md` format and are linked into both clients' user skill directories.
 
 [`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins.
 
-[`codex/config.toml`](/Users/msaps/.dotfiles/codex/config.toml) manages Codex MCP server setup and project trust.
+[`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials. Codex owns `~/.codex/config.toml` because the desktop app updates plugin state, generated MCP configuration, and project trust there; it is intentionally not symlinked or committed.
 
 ## Assumptions and Constraints
 
