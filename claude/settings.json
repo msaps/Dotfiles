@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(npm uninstall:*)",
@@ -34,7 +35,13 @@
       "Bash(git tag:*)",
       "Bash(pnpm:*)",
       "Bash(find:*)",
+      "Bash(rg:*)",
       "Bash(grep:*)",
+      "Bash(cat:*)",
+      "Bash(git remote:*)",
+      "Bash(git symbolic-ref:*)",
+      "Bash(git rebase:*)",
+      "Bash(gh repo view:*)",
       "Bash(xcodebuildmcp:*)",
       "Bash(xcodebuild:*)",
       "Bash(sed:*)",
@@ -95,7 +102,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/safe-force-push-check.sh",
+            "command": "~/.agents/hooks/git-push-policy.sh",
             "if": "Bash(git push*)",
             "timeout": 10
           }
