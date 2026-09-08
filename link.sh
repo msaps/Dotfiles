@@ -38,6 +38,7 @@ echo "==> Setting up AI agents..."
 ensure_dir "$HOME/.agents"
 ensure_dir "$HOME/.agents/skills"
 ensure_dir "$HOME/.agents/agents"
+ensure_dir "$HOME/.agents/plans"
 ensure_dir "$HOME/.claude"
 ensure_dir "$HOME/.claude/skills"
 ensure_dir "$HOME/.claude/agents"
@@ -45,11 +46,17 @@ ensure_dir "$HOME/.codex"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
-ln -sfn "$DOTFILES_DIR/claude/commands" "$HOME/.claude/commands"
 ln -sfn "$DOTFILES_DIR/claude/hooks" "$HOME/.claude/hooks"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
-ln -sfn "$DOTFILES_DIR/codex/prompts" "$HOME/.codex/prompts"
 ln -sfn "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
+# Remove only legacy links previously created by this repository. Skills now
+# replace Claude commands and deprecated Codex prompts.
+if [ -L "$HOME/.claude/commands" ] && [ "$(readlink "$HOME/.claude/commands")" = "$DOTFILES_DIR/claude/commands" ]; then
+    unlink "$HOME/.claude/commands"
+fi
+if [ -L "$HOME/.codex/prompts" ] && [ "$(readlink "$HOME/.codex/prompts")" = "$DOTFILES_DIR/codex/prompts" ]; then
+    unlink "$HOME/.codex/prompts"
+fi
 # Symlink each skill individually so external tools can add skills alongside
 for skill_dir in "$DOTFILES_DIR/agents/skills"/*/; do
     skill_name=$(basename "$skill_dir")
