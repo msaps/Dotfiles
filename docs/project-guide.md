@@ -4,12 +4,12 @@
 
 This repository is a home-directory bootstrap for a macOS development machine.
 
-It does not use a dotfile manager. Instead, it keeps a small set of config files in normal folders and uses a single install script to:
+It does not use a dotfile manager. Instead, it keeps a small set of config files in normal folders and provides separate install and link entrypoints to:
 
 1. install prerequisite tooling
 2. install packages and applications
 3. symlink managed files into `$HOME`
-4. finish language-specific setup such as Ruby gems and local fonts
+4. install local fonts
 
 The result is a repo that is easy to inspect and easy to rerun on an existing machine.
 
@@ -19,9 +19,11 @@ The top-level directories are organized by target tool rather than by automation
 
 | Path | Purpose |
 | --- | --- |
-| [`install.sh`](/Users/msaps/.dotfiles/install.sh) | Main bootstrap entrypoint |
+| [`Makefile`](/Users/msaps/.dotfiles/Makefile) | Public `install` and `link` entrypoints |
+| [`install.sh`](/Users/msaps/.dotfiles/install.sh) | Full machine bootstrap |
+| [`link.sh`](/Users/msaps/.dotfiles/link.sh) | Symlink-only configuration refresh |
 | [`Brewfile`](/Users/msaps/.dotfiles/Brewfile) | Homebrew formulae and casks |
-| [`Gemfile`](/Users/msaps/.dotfiles/Gemfile) | Ruby gems installed after `rbenv` is configured |
+| [`Gemfile`](/Users/msaps/.dotfiles/Gemfile) | Ruby gem dependency manifest |
 | [`zsh/`](/Users/msaps/.dotfiles/zsh) | Shell startup files |
 | [`git/`](/Users/msaps/.dotfiles/git) | Global Git config and ignore rules |
 | [`homebrew/`](/Users/msaps/.dotfiles/homebrew) | Homebrew environment file |
@@ -34,23 +36,21 @@ The top-level directories are organized by target tool rather than by automation
 
 ## Bootstrap Flow
 
-[`install.sh`](/Users/msaps/.dotfiles/install.sh) is the only automation entrypoint. It currently does the following in order:
+Run `make install` for a full bootstrap. It invokes [`install.sh`](/Users/msaps/.dotfiles/install.sh), which currently does the following in order:
 
 1. Ensures the repo exists at `~/.dotfiles`, cloning it if needed.
 2. Installs Xcode Command Line Tools if `xcode-select` is missing.
 3. Installs Homebrew if `brew` is unavailable.
-4. Symlinks [`homebrew/brew.env`](/Users/msaps/.dotfiles/homebrew/brew.env) into `~/.homebrew/brew.env`.
-5. Runs `brew bundle` against [`Brewfile`](/Users/msaps/.dotfiles/Brewfile).
-6. Installs Oh My Zsh and the `zsh-autosuggestions` plugin if missing.
-7. Creates or refreshes symlinks for all managed dotfiles.
-8. Installs Ruby `3.2.2` with `rbenv`, sets it global, then runs `bundle install`.
-9. Copies bundled iTerm fonts into `~/Library/Fonts`.
+4. Runs `brew bundle` against [`Brewfile`](/Users/msaps/.dotfiles/Brewfile).
+5. Installs Oh My Zsh and the `zsh-autosuggestions` plugin if missing.
+6. Invokes [`link.sh`](/Users/msaps/.dotfiles/link.sh) to create or refresh all managed symlinks.
+7. Copies bundled iTerm fonts into `~/Library/Fonts`.
 
-Because the symlink step uses `ln -sf`, rerunning the installer is the intended update path.
+Run `make link` after pulling ordinary configuration changes. It invokes `link.sh` directly, without package installation or macOS setup. Use `make install` when bootstrap dependencies or the `Brewfile` changed.
 
 ## Symlink Map
 
-The repo uses explicit symlinks rather than a generated map. This is the current behavior of [`install.sh`](/Users/msaps/.dotfiles/install.sh):
+The repo uses explicit symlinks rather than a generated map. This is the current behavior of [`link.sh`](/Users/msaps/.dotfiles/link.sh):
 
 | Repo file | Linked location |
 | --- | --- |
@@ -95,7 +95,7 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 - development tools like `go`, `rbenv`, `volta`, `swiftlint`, `vapor`, and `xcodes`
 - desktop apps including iTerm2, VS Code, Tower, Proxyman, Claude, and a few utility apps
 
-[`Gemfile`](/Users/msaps/.dotfiles/Gemfile) is intentionally small and piggybacks on the Ruby version the installer configures.
+[`Gemfile`](/Users/msaps/.dotfiles/Gemfile) is intentionally small. Ruby version selection and `bundle install` remain manual steps; the bootstrap installs `rbenv` but does not configure a Ruby version.
 
 ### Git and GitHub
 
@@ -128,7 +128,7 @@ Those assumptions are fine for a personal machine bootstrap, but they are worth 
 When adding a new managed config:
 
 1. Store the source file in a tool-specific folder in the repo.
-2. Add the corresponding symlink step to [`install.sh`](/Users/msaps/.dotfiles/install.sh).
+2. Add the corresponding symlink step to [`link.sh`](/Users/msaps/.dotfiles/link.sh).
 3. If the tool needs installation, add it to [`Brewfile`](/Users/msaps/.dotfiles/Brewfile) or document the manual step.
 4. Update this guide if the bootstrap flow or symlink map changes.
 

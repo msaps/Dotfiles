@@ -5,7 +5,7 @@ Personal macOS dotfiles used for two jobs:
 1. Keep everyday shell and tool configuration under version control.
 2. Bootstrap a fresh machine by installing packages and wiring the managed files into `$HOME`.
 
-The repository is intentionally simple. Most folders mirror a target location in the home directory, and [`install.sh`](~/.dotfiles/install.sh) is the bootstrap script that installs dependencies and recreates the symlinks.
+The repository is intentionally simple. Most folders mirror a target location in the home directory. `make install` bootstraps a machine, while `make link` only refreshes the managed symlinks.
 
 ## Quick Start
 
@@ -13,14 +13,20 @@ Clone the repo into `~/.dotfiles` and run the installer:
 
 ```bash
 git clone https://github.com/msaps/Dotfiles.git ~/.dotfiles
-~/.dotfiles/install.sh
+make -C ~/.dotfiles install
 ```
 
 If the repo is already present:
 
 ```bash
 cd ~/.dotfiles
-./install.sh
+make install
+```
+
+To refresh configuration without installing packages or changing macOS settings:
+
+```bash
+make link
 ```
 
 ## What This Repo Manages
@@ -59,10 +65,12 @@ agent definitions in `codex/agents/`, while shared workflows live in
 
 ## Updating
 
-Pull the latest changes and rerun the installer:
+Pull the latest changes and refresh the symlinks:
 
 ```bash
 cd ~/.dotfiles
-git pull
-./install.sh
+git pull --rebase
+make link
 ```
+
+Use `make install` instead when bootstrap dependencies or the `Brewfile` changed.
