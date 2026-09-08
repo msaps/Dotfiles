@@ -61,12 +61,14 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 | [`git/.gitignore`](/Users/msaps/.dotfiles/git/.gitignore) | `~/.gitignore` |
 | [`misc/.curlrc`](/Users/msaps/.dotfiles/misc/.curlrc) | `~/.curlrc` |
 | [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) | `~/.agents/AGENTS.md` |
+| [`agents/hooks`](/Users/msaps/.dotfiles/agents/hooks) | `~/.agents/hooks` |
 | [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) | `~/.claude/CLAUDE.md` |
 | [`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) | `~/.claude/settings.json` |
 | [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) | `~/.codex/AGENTS.md` |
 | Each directory in [`agents/skills`](/Users/msaps/.dotfiles/agents/skills) | `~/.agents/skills/<name>` and `~/.claude/skills/<name>` |
 | Each file in [`agents/agents`](/Users/msaps/.dotfiles/agents/agents) | `~/.agents/agents/<name>.md` and `~/.claude/agents/<name>.md` |
 | Each file in [`codex/agents`](/Users/msaps/.dotfiles/codex/agents) | `~/.codex/agents/<name>.toml` |
+| [`codex/hooks.json`](/Users/msaps/.dotfiles/codex/hooks.json) | `~/.codex/hooks.json` |
 | [`codex/rules`](/Users/msaps/.dotfiles/codex/rules) | `~/.codex/rules` |
 | [`gh/config.yml`](/Users/msaps/.dotfiles/gh/config.yml) | `~/.config/gh/config.yml` |
 
@@ -105,9 +107,9 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 
 [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) is shared between Claude Code and Codex so both tools inherit the same local working rules. Reusable workflows use the open `SKILL.md` format and are linked into both clients' user skill directories.
 
-[`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins.
+[`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins. Claude and Codex both run the shared Git push hook in [`agents/hooks`](/Users/msaps/.dotfiles/agents/hooks), which blocks bare force pushes and permits `--force-with-lease` only from `feature/*` branches.
 
-[`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials. Codex owns `~/.codex/config.toml` because the desktop app updates plugin state, generated MCP configuration, and project trust there; it is intentionally not symlinked or committed.
+[`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials, aligned with the intent of Claude's permission lists where the clients expose equivalent controls. Codex owns `~/.codex/config.toml` because the desktop app updates plugin state, generated MCP configuration, and project trust there; it is intentionally not symlinked or committed. Sandbox or permission-profile selection remains an app or session setting rather than a checked-in default.
 
 ## Assumptions and Constraints
 

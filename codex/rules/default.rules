@@ -1,131 +1,69 @@
-prefix_rule(
-    pattern = ["ls"],
-    decision = "allow",
-    justification = "Allow directory listing during repository exploration"
-)
+# Read-only repository exploration.
+prefix_rule(pattern = ["ls"], decision = "allow")
+prefix_rule(pattern = ["find"], decision = "allow")
+prefix_rule(pattern = ["rg"], decision = "allow")
+prefix_rule(pattern = ["grep"], decision = "allow")
+prefix_rule(pattern = ["cat"], decision = "allow")
+prefix_rule(pattern = ["sed"], decision = "allow")
 
-prefix_rule(
-    pattern = ["find"],
-    decision = "allow",
-    justification = "Allow file discovery during repository exploration"
-)
+# Git inspection and normal feature-branch workflows. The shared PreToolUse
+# hook independently rejects unsafe force pushes.
+prefix_rule(pattern = ["git", "status"], decision = "allow")
+prefix_rule(pattern = ["git", "branch"], decision = "allow")
+prefix_rule(pattern = ["git", "checkout"], decision = "allow")
+prefix_rule(pattern = ["git", "remote"], decision = "allow")
+prefix_rule(pattern = ["git", "symbolic-ref"], decision = "allow")
+prefix_rule(pattern = ["git", "log"], decision = "allow")
+prefix_rule(pattern = ["git", "diff"], decision = "allow")
+prefix_rule(pattern = ["git", "add"], decision = "allow")
+prefix_rule(pattern = ["git", "commit"], decision = "allow")
+prefix_rule(pattern = ["git", "push"], decision = "allow")
+prefix_rule(pattern = ["git", "rebase"], decision = "allow")
+prefix_rule(pattern = ["/bin/zsh", "-lc", "GIT_EDITOR=true git rebase --continue"], decision = "allow")
 
-prefix_rule(
-    pattern = ["rg"],
-    decision = "allow",
-    justification = "Allow fast text and file search during repository exploration"
-)
+# GitHub inspection and the mutations used by the managed skills.
+prefix_rule(pattern = ["gh", "auth"], decision = "allow")
+prefix_rule(pattern = ["gh", "repo", "view"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "view"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "list"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "diff"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "checks"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "comment"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "create"], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", "merge", "--auto", "--squash"], decision = "allow")
+prefix_rule(pattern = ["gh", "issue", "view"], decision = "allow")
+prefix_rule(pattern = ["gh", "issue", "list"], decision = "allow")
+prefix_rule(pattern = ["gh", "issue", "comment"], decision = "allow")
+prefix_rule(pattern = ["gh", "issue", "create"], decision = "allow")
+prefix_rule(pattern = ["gh", "issue", "edit"], decision = "allow")
+prefix_rule(pattern = ["gh", "release", "list"], decision = "allow")
+prefix_rule(pattern = ["gh", "run", "view"], decision = "allow")
 
-prefix_rule(
-    pattern = ["grep"],
-    decision = "allow",
-    justification = "Allow text search during repository exploration"
-)
+# Common local build and package commands.
+prefix_rule(pattern = ["npm", "uninstall"], decision = "allow")
+prefix_rule(pattern = ["volta", "which"], decision = "allow")
+prefix_rule(pattern = ["volta", "list"], decision = "allow")
+prefix_rule(pattern = ["volta", "run", "node"], decision = "allow")
+prefix_rule(pattern = ["pnpm"], decision = "allow")
+prefix_rule(pattern = ["npx", "tsx"], decision = "allow")
+prefix_rule(pattern = ["xcodebuildmcp"], decision = "allow")
+prefix_rule(pattern = ["xcodebuild"], decision = "allow")
+prefix_rule(pattern = ["swift", "build"], decision = "allow")
+prefix_rule(pattern = ["swift", "test"], decision = "allow")
+prefix_rule(pattern = ["./gradlew", "build"], decision = "allow")
 
-prefix_rule(
-    pattern = ["cat"],
-    decision = "allow",
-    justification = "Allow reading file contents during repository exploration"
-)
-
-prefix_rule(
-    pattern = ["sed"],
-    decision = "allow",
-    justification = "Allow non-interactive file reads during repository exploration"
-)
-
-prefix_rule(
-    pattern = ["git", "status"],
-    decision = "allow",
-    justification = "Allow repository status checks for review and PR workflows"
-)
-
-prefix_rule(
-    pattern = ["git", "branch"],
-    decision = "allow",
-    justification = "Allow branch inspection and creation for PR workflows"
-)
-
-prefix_rule(
-    pattern = ["git", "checkout"],
-    decision = "allow",
-    justification = "Allow switching to or creating working branches"
-)
-
-prefix_rule(
-    pattern = ["git", "remote"],
-    decision = "allow",
-    justification = "Allow reading remote configuration during PR preparation"
-)
-
-prefix_rule(
-    pattern = ["git", "symbolic-ref"],
-    decision = "allow",
-    justification = "Allow resolving the remote default branch"
-)
-
-prefix_rule(
-    pattern = ["git", "log"],
-    decision = "allow",
-    justification = "Allow commit history inspection for review and PR summaries"
-)
-
-prefix_rule(
-    pattern = ["git", "diff"],
-    decision = "allow",
-    justification = "Allow diff inspection for review and PR summaries"
-)
-
-prefix_rule(
-    pattern = ["git", "add"],
-    decision = "allow",
-    justification = "Allow staging files before creating commits"
-)
-
-prefix_rule(
-    pattern = ["git", "commit"],
-    decision = "allow",
-    justification = "Allow creating commits without an extra permission prompt"
-)
-
-prefix_rule(
-    pattern = ["git", "push"],
-    decision = "allow",
-    justification = "Allow pushing branches before opening pull requests"
-)
-
-prefix_rule(
-    pattern = ["gh", "auth"],
-    decision = "allow",
-    justification = "Allow checking GitHub CLI authentication for PR workflows"
-)
-
-prefix_rule(
-    pattern = ["gh", "pr", "view"],
-    decision = "allow",
-    justification = "Allow reading pull request state from GitHub"
-)
-
-prefix_rule(
-    pattern = ["gh", "pr", "create"],
-    decision = "allow",
-    justification = "Allow creating pull requests without an extra permission prompt"
-)
-
-prefix_rule(
-    pattern = ["gh", "pr", "merge"],
-    decision = "allow",
-    justification = "Allow enabling PR auto-merge from the CLI"
-)
-prefix_rule(pattern=["swift", "test"], decision="allow")
-prefix_rule(pattern=["git", "rebase"], decision="allow")
-prefix_rule(pattern=["/bin/zsh", "-lc", "GIT_EDITOR=true git rebase --continue"], decision="allow")
-prefix_rule(pattern=["gh", "run", "view"], decision="allow")
-prefix_rule(pattern=["curl", "-sS", "-X", "POST"], decision="allow")
-prefix_rule(pattern=["curl", "-sS"], decision="allow")
-prefix_rule(pattern=["gh", "repo", "view"], decision="allow")
-prefix_rule(pattern=["npx", "tsx"], decision="allow")
-prefix_rule(pattern=["./gradlew", "build"], decision="allow")
-prefix_rule(pattern=["pnpm", "install"], decision="allow")
-prefix_rule(pattern=["pnpm", "prototype", "shoot"], decision="allow")
-prefix_rule(pattern=["pnpm", "prototype", "serve"], decision="allow")
+# Destructive operations blocked in Claude Code are also blocked when they
+# request execution outside the Codex sandbox. The git-push hook covers force
+# flags in any argument position.
+prefix_rule(pattern = ["rm", "-rf"], decision = "forbidden", justification = "Use a narrowly scoped, recoverable removal instead.")
+prefix_rule(pattern = ["rm", "-fr"], decision = "forbidden", justification = "Use a narrowly scoped, recoverable removal instead.")
+prefix_rule(pattern = ["git", "push", "--force"], decision = "forbidden", justification = "Use --force-with-lease on a feature/* branch.")
+prefix_rule(pattern = ["git", "push", "-f"], decision = "forbidden", justification = "Use --force-with-lease on a feature/* branch.")
+prefix_rule(pattern = ["git", "reset", "--hard"], decision = "forbidden", justification = "Preserve local work and use a non-destructive alternative.")
+prefix_rule(pattern = ["git", "checkout", "--"], decision = "forbidden", justification = "Preserve local work and use a non-destructive alternative.")
+prefix_rule(pattern = ["git", "branch", "-D"], decision = "forbidden", justification = "Use normal branch deletion after verifying it is merged.")
+prefix_rule(pattern = ["gh", "pr", "close"], decision = "forbidden")
+prefix_rule(pattern = ["gh", "issue", "close"], decision = "forbidden")
+prefix_rule(pattern = ["gh", "issue", "delete"], decision = "forbidden")
+prefix_rule(pattern = ["gh", "repo", "delete"], decision = "forbidden")
+prefix_rule(pattern = ["curl"], decision = "prompt", justification = "Confirm network requests and inspect mutating methods or body flags before execution.")
