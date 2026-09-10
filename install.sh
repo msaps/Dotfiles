@@ -73,6 +73,7 @@ if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
 fi
 
 bash "$DOTFILES_DIR/link.sh"
+make -C "$DOTFILES_DIR" link-codex-system-config
 
 # Install iTerm2 fonts
 echo "==> Installing iTerm2 fonts..."
