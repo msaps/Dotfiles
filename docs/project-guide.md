@@ -43,15 +43,14 @@ Run `make install` for a full bootstrap. It invokes [`install.sh`](/Users/msaps/
 3. Installs Homebrew if `brew` is unavailable.
 4. Runs `brew bundle` against [`Brewfile`](/Users/msaps/.dotfiles/Brewfile).
 5. Installs Oh My Zsh and the `zsh-autosuggestions` plugin if missing.
-6. Invokes [`link.sh`](/Users/msaps/.dotfiles/link.sh) to create or refresh user-level symlinks.
-7. Links the shared Codex defaults into `/etc/codex/config.toml`, prompting for macOS administrator access when needed.
-8. Copies bundled iTerm fonts into `~/Library/Fonts`.
+6. Invokes [`link.sh`](/Users/msaps/.dotfiles/link.sh) to create or refresh all managed symlinks.
+7. Copies bundled iTerm fonts into `~/Library/Fonts`.
 
 Run `make link` after pulling ordinary configuration changes. It invokes `link.sh` directly, without package installation or macOS setup. Use `make install` when bootstrap dependencies or the `Brewfile` changed.
 
 ## Symlink Map
 
-The repo uses explicit symlinks rather than a generated map. The setup scripts create the following links:
+The repo uses explicit symlinks rather than a generated map. This is the current behavior of [`link.sh`](/Users/msaps/.dotfiles/link.sh):
 
 | Repo file | Linked location |
 | --- | --- |
@@ -69,7 +68,6 @@ The repo uses explicit symlinks rather than a generated map. The setup scripts c
 | Each directory in [`agents/skills`](/Users/msaps/.dotfiles/agents/skills) | `~/.agents/skills/<name>` and `~/.claude/skills/<name>` |
 | Each file in [`agents/agents`](/Users/msaps/.dotfiles/agents/agents) | `~/.agents/agents/<name>.md` and `~/.claude/agents/<name>.md` |
 | Each file in [`codex/agents`](/Users/msaps/.dotfiles/codex/agents) | `~/.codex/agents/<name>.toml` |
-| [`codex/config.toml`](/Users/msaps/.dotfiles/codex/config.toml) | `/etc/codex/config.toml` |
 | [`codex/hooks.json`](/Users/msaps/.dotfiles/codex/hooks.json) | `~/.codex/hooks.json` |
 | [`codex/rules`](/Users/msaps/.dotfiles/codex/rules) | `~/.codex/rules` |
 | [`gh/config.yml`](/Users/msaps/.dotfiles/gh/config.yml) | `~/.config/gh/config.yml` |
@@ -111,7 +109,7 @@ The repo uses explicit symlinks rather than a generated map. The setup scripts c
 
 [`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins. Claude and Codex both run the shared Git push hook in [`agents/hooks`](/Users/msaps/.dotfiles/agents/hooks), which blocks bare force pushes and permits `--force-with-lease` only from `feature/*` branches.
 
-[`codex/config.toml`](/Users/msaps/.dotfiles/codex/config.toml) provides portable Codex defaults, including automatic approval review and full sandbox access. It is linked to the native system layer at `/etc/codex/config.toml`. Codex reads the writable, higher-precedence `~/.codex/config.toml` separately, so generated project trust, hook approval, and UI state remain local to each machine. Run `make link-codex-system-config` to install or repair the system link.
+Codex user configuration remains isolated in `~/.codex/config.toml` and is not managed by this repository. This allows Codex to persist preferences, project trust, hook approvals, and UI state independently on each machine.
 
 [`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials, aligned with the intent of Claude's permission lists where the clients expose equivalent controls.
 
@@ -121,7 +119,6 @@ This repo currently assumes:
 
 - macOS
 - a user account with a writable home directory
-- administrator access during bootstrap to install the Codex system config link
 - internet access during bootstrap
 - Homebrew installed to `/opt/homebrew`
 - the repo living at `~/.dotfiles`

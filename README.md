@@ -5,7 +5,7 @@ Personal macOS dotfiles used for two jobs:
 1. Keep everyday shell and tool configuration under version control.
 2. Bootstrap a fresh machine by installing packages and wiring the managed files into `$HOME`.
 
-The repository is intentionally simple. Most folders mirror a target location in the home directory. `make install` bootstraps a machine, while `make link` only refreshes the user-level symlinks.
+The repository is intentionally simple. Most folders mirror a target location in the home directory. `make install` bootstraps a machine, while `make link` only refreshes the managed symlinks.
 
 ## Quick Start
 
@@ -58,14 +58,10 @@ Some tools still require interactive setup after the script finishes:
 3. Run `gh auth login`.
 4. Launch Claude Code and Codex and complete any first-run authentication.
 
-Portable Codex defaults live in `codex/config.toml`, which `make install` links
-to `/etc/codex/config.toml` using the native system configuration layer. The
-higher-precedence `~/.codex/config.toml` remains local and writable so Codex can
-store project trust, hook approvals, and UI state without changing tracked
-files. Installing the system link requires a one-time macOS administrator
-prompt; rerun `make link-codex-system-config` if the link ever needs repairing.
-Durable command policy lives in `codex/rules/`, custom agent definitions in
-`codex/agents/`, and shared workflows in `agents/skills/`.
+Codex user configuration remains local at `~/.codex/config.toml` and is not
+managed by this repository. Durable command policy lives in `codex/rules/`,
+custom agent definitions in `codex/agents/`, and shared workflows in
+`agents/skills/`.
 
 ## Updating
 
