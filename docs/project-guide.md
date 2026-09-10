@@ -68,6 +68,7 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 | Each directory in [`agents/skills`](/Users/msaps/.dotfiles/agents/skills) | `~/.agents/skills/<name>` and `~/.claude/skills/<name>` |
 | Each file in [`agents/agents`](/Users/msaps/.dotfiles/agents/agents) | `~/.agents/agents/<name>.md` and `~/.claude/agents/<name>.md` |
 | Each file in [`codex/agents`](/Users/msaps/.dotfiles/codex/agents) | `~/.codex/agents/<name>.toml` |
+| [`codex/config.toml`](/Users/msaps/.dotfiles/codex/config.toml) | `~/.codex/config.toml` |
 | [`codex/hooks.json`](/Users/msaps/.dotfiles/codex/hooks.json) | `~/.codex/hooks.json` |
 | [`codex/rules`](/Users/msaps/.dotfiles/codex/rules) | `~/.codex/rules` |
 | [`gh/config.yml`](/Users/msaps/.dotfiles/gh/config.yml) | `~/.config/gh/config.yml` |
@@ -109,7 +110,9 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 
 [`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins. Claude and Codex both run the shared Git push hook in [`agents/hooks`](/Users/msaps/.dotfiles/agents/hooks), which blocks bare force pushes and permits `--force-with-lease` only from `feature/*` branches.
 
-[`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials, aligned with the intent of Claude's permission lists where the clients expose equivalent controls. Codex owns `~/.codex/config.toml` because the desktop app updates plugin state, generated MCP configuration, and project trust there; it is intentionally not symlinked or committed. Sandbox or permission-profile selection remains an app or session setting rather than a checked-in default.
+[`codex/config.toml`](/Users/msaps/.dotfiles/codex/config.toml) provides shared Codex user defaults, including automatic approval review and full sandbox access. It is linked to `~/.codex/config.toml`; Codex Desktop therefore writes configuration changes into the tracked file, and generated or machine-specific changes should be reviewed before committing.
+
+[`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials, aligned with the intent of Claude's permission lists where the clients expose equivalent controls.
 
 ## Assumptions and Constraints
 

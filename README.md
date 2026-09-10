@@ -58,10 +58,12 @@ Some tools still require interactive setup after the script finishes:
 3. Run `gh auth login`.
 4. Launch Claude Code and Codex and complete any first-run authentication.
 
-Codex keeps its generated `~/.codex/config.toml` under application control. This
-repository manages durable Codex command policy in `codex/rules/` and custom
-agent definitions in `codex/agents/`, while shared workflows live in
-`agents/skills/`.
+Codex user defaults live in `codex/config.toml`, which is linked to
+`~/.codex/config.toml` so they stay consistent across machines. Codex Desktop
+may update the tracked file through that symlink, so review generated or
+machine-specific changes before committing them. Durable command policy lives
+in `codex/rules/`, custom agent definitions in `codex/agents/`, and shared
+workflows in `agents/skills/`.
 
 ## Updating
 
