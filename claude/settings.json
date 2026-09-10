@@ -68,7 +68,6 @@
       "Bash(git reset --hard*)",
       "Bash(git checkout -- *)",
       "Bash(git branch -D*)",
-      "Bash(gh pr close:*)",
       "Bash(gh issue delete:*)",
       "Bash(gh repo delete:*)"
     ],
@@ -78,7 +77,8 @@
       "Bash(curl *-d *)",
       "Bash(curl *--upload-file *)",
       "Bash(curl *-T *)",
-      "Bash(gh issue close:*)"
+      "Bash(gh issue close:*)",
+      "Bash(gh pr close:*)"
     ],
     "defaultMode": "auto"
   },
