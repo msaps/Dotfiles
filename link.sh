@@ -50,6 +50,7 @@ ln -sf "$DOTFILES_DIR/agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
 ln -sfn "$DOTFILES_DIR/agents/hooks" "$HOME/.agents/hooks"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sfn "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
+ln -sf "$DOTFILES_DIR/codex/config.toml" "$HOME/.codex/config.toml"
 ln -sf "$DOTFILES_DIR/codex/hooks.json" "$HOME/.codex/hooks.json"
 # Remove only legacy links previously created by this repository. Skills now
 # replace Claude commands and deprecated Codex prompts.
