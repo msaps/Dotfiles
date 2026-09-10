@@ -51,12 +51,6 @@ ln -sfn "$DOTFILES_DIR/agents/hooks" "$HOME/.agents/hooks"
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sfn "$DOTFILES_DIR/codex/rules" "$HOME/.codex/rules"
 ln -sf "$DOTFILES_DIR/codex/hooks.json" "$HOME/.codex/hooks.json"
-# Codex writes machine-local state into its user config. Remove only the
-# legacy link created by this repository; shared defaults now load from the
-# lower-precedence system config installed by `make link-codex-system-config`.
-if [ -L "$HOME/.codex/config.toml" ] && [ "$(readlink "$HOME/.codex/config.toml")" = "$DOTFILES_DIR/codex/config.toml" ]; then
-    unlink "$HOME/.codex/config.toml"
-fi
 # Remove only legacy links previously created by this repository. Skills now
 # replace Claude commands and deprecated Codex prompts.
 if [ -L "$HOME/.claude/commands" ] && [ "$(readlink "$HOME/.claude/commands")" = "$DOTFILES_DIR/claude/commands" ]; then
