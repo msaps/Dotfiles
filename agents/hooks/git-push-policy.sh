@@ -8,7 +8,7 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
 [[ "$cmd" == *"git push"* ]] || exit 0
 
 deny() {
-    printf '%s' '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Force pushes are allowed only with --force-with-lease on feature/* branches; main and master are protected."}}'
+    printf '%s' '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Force pushes are allowed only with --force-with-lease on branches other than main/master; main and master are protected."}}'
     exit 0
 }
 
@@ -28,6 +28,6 @@ if printf '%s' "$cmd" | grep -qE '(^|[[:space:]:/])(main|master)([[:space:]]|$)'
 fi
 
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
-[[ "$branch" == feature/* ]] || deny
+[[ "$branch" == "main" || "$branch" == "master" ]] && deny
 
-printf '%s' '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"Safe --force-with-lease push from a feature/* branch."}}'
+printf '%s' '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"Safe --force-with-lease push from a non-protected branch."}}'

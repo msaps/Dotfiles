@@ -107,7 +107,7 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 
 [`agents/AGENTS.md`](/Users/msaps/.dotfiles/agents/AGENTS.md) is shared between Claude Code and Codex so both tools inherit the same local working rules. Reusable workflows use the open `SKILL.md` format and are linked into both clients' user skill directories.
 
-[`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins. Claude and Codex both run the shared Git push hook in [`agents/hooks`](/Users/msaps/.dotfiles/agents/hooks), which blocks bare force pushes and permits `--force-with-lease` only from `feature/*` branches.
+[`claude/settings.json`](/Users/msaps/.dotfiles/claude/settings.json) manages Claude permissions and enabled plugins. Claude and Codex both run the shared Git push hook in [`agents/hooks`](/Users/msaps/.dotfiles/agents/hooks), which blocks bare force pushes and permits `--force-with-lease` on any branch except `main`/`master`.
 
 Codex user configuration remains isolated in `~/.codex/config.toml` and is not managed by this repository. This allows Codex to persist preferences, project trust, hook approvals, and UI state independently on each machine.
 
