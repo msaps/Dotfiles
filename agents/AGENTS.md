@@ -36,6 +36,13 @@ These rules are ABSOLUTE:
 ## ALWAYS DO
 These rules are ABSOLUTE:
 
+### ALWAYS Sync Before New Work
+
+- Before starting new implementation work in a Git repository, fetch remote state and fast-forward the current branch to its configured upstream only when the checkout is clean and the update requires no merge or rebase.
+- A session-start hook result for the current repository satisfies this step. If no hook ran, use `"$HOME/.agents/hooks/git-session-sync.sh" --cwd "$PWD"` when available, or follow the same policy with Git.
+- Preserve local changes, untracked files, local commits, detached checkouts, and in-progress Git operations. Never stash, reset, rebase, switch branches, or push as part of automatic sync.
+- If sync fails or is skipped, use the reported state to decide how to proceed; do not repeatedly retry or treat it as permission to overwrite work.
+
 ### ALWAYS Commit Often
 
 - ALWAYS commit after each individual part of an implementation of a plan is complete. Each step should represent an individual commit.

@@ -1,6 +1,19 @@
 {
-  "description": "Protect Git pushes with the shared agent policy hook.",
+  "description": "Sync repositories at session start and protect Git pushes with shared agent hooks.",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.agents/hooks/git-session-sync.sh\"",
+            "timeout": 30,
+            "statusMessage": "Syncing Git repository"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",

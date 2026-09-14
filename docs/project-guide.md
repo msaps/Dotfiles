@@ -111,6 +111,18 @@ The repo uses explicit symlinks rather than a generated map. This is the current
 
 Codex user configuration remains isolated in `~/.codex/config.toml` and is not managed by this repository. This allows Codex to persist preferences, project trust, hook approvals, and UI state independently on each machine.
 
+[`codex/hooks.json`](/Users/msaps/.dotfiles/codex/hooks.json) also runs the shared [`git-session-sync.sh`](/Users/msaps/.dotfiles/agents/hooks/git-session-sync.sh) on session startup, resume, and clear, but not compaction. It uses the session's working directory, including nested directories and linked worktrees; it does not sync `~/.dotfiles` unless that is the active repository.
+
+The sync fetches all configured remotes and prunes deleted remote branches, then fast-forwards only the current branch to its configured remote upstream when the checkout is clean. Local changes (including untracked files and dirty submodules), local commits, detached HEAD, missing upstreams, and in-progress Git operations prevent automatic fast-forwarding. It never stashes, rebases, resets, switches branches, or pushes. Fast-forwarding also refuses to overwrite ignored files, disables Git merge hooks, and leaves submodule checkouts alone.
+
+The script uses Bash, Git, and `jq`, like the existing push hook. Codex allows it 30 seconds and receives a short result as agent context. Fetch failures leave the checked-out branch unchanged and do not block the session. Non-Git directories are ignored. The shared instructions tell Claude and other agents to use the same script before new implementation work when no session hook has run:
+
+```sh
+"$HOME/.agents/hooks/git-session-sync.sh" --cwd "$PWD"
+```
+
+Run `make link` to install the managed hook files. In Codex, review and trust the new hook through `/hooks` before its first run; hook trust stays in local configuration and is not bootstrapped or committed. See the [official hook documentation](https://learn.chatgpt.com/docs/hooks). Run `bash tests/git-session-sync.sh` to exercise sync behavior against temporary local repositories.
+
 [`codex/rules/default.rules`](/Users/msaps/.dotfiles/codex/rules/default.rules) manages durable Codex command approvals and denials, aligned with the intent of Claude's permission lists where the clients expose equivalent controls.
 
 ## Assumptions and Constraints
