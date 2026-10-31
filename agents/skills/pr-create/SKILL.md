@@ -7,6 +7,8 @@ description: Create a GitHub pull request from the current feature branch, with 
 
 Create a pull request for the current branch. Inspect the complete branch, preserve the user's work, and return the PR URL.
 
+Use the `gh` CLI for every GitHub interaction (reading, commenting, reviewing, merging), including `gh api` for endpoints without a dedicated subcommand. Never use a GitHub connector, app integration, or MCP/plugin tool, even if one is available.
+
 ## Preflight
 
 1. Read `git status --short`, the current branch, remotes, and the repository's default branch from `gh repo view --json defaultBranchRef,nameWithOwner`.

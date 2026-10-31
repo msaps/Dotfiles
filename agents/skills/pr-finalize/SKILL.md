@@ -7,6 +7,8 @@ description: Address outstanding GitHub pull-request feedback, commit and push r
 
 Process all outstanding feedback on a PR without approving or merging it.
 
+Use the `gh` CLI for every GitHub interaction (reading, commenting, reviewing, merging), including `gh api` for endpoints without a dedicated subcommand. Never use a GitHub connector, app integration, or MCP/plugin tool, even if one is available.
+
 ## Load context safely
 
 1. Resolve the PR number from the user's input or current branch. Read its state, title, URL, base, head branch and repository, head SHA, checks, reviews, and mergeability.

@@ -7,6 +7,8 @@ description: Independently review a GitHub pull request in an isolated worktree 
 
 Review a PR independently, deduplicate against existing feedback, and post only new, defensible findings. Invoking this skill explicitly authorizes a `COMMENT` review, never approval or a request for changes.
 
+Use the `gh` CLI for every GitHub interaction (reading, commenting, reviewing, merging), including `gh api` for endpoints without a dedicated subcommand. Never use a GitHub connector, app integration, or MCP/plugin tool, even if one is available.
+
 ## Resolve and isolate
 
 1. Require a PR number or URL. Read the PR's repository, state, draft status, author, base, head branch, head repository, head SHA, additions, deletions, changed-file count, and commits.
