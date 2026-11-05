@@ -67,9 +67,11 @@ Activity is any new commit, review, review comment or issue comment, any check s
 | --- | --- |
 | PR merged | Merged, with what was addressed |
 | PR closed without merge | Closed |
-| PR approved with no unresolved feedback | Approved and merge-ready, noting whether auto-merge is still pending |
+| PR fully mergeable: approved (review decision satisfied), no unresolved feedback, every check completed successfully, and no merge conflicts or other blocking state | Merge-ready, noting whether auto-merge is still pending |
 | `pr-finalize` reports a blocked conclusion | Blocked, with the reason and what is needed |
-| 15 minutes with no activity | Idle timeout, with the last known state |
+| 15 minutes with no activity while no checks are pending | Idle timeout, with the last known state |
+
+Approval alone is never a stop condition. If the PR is approved but checks are still queued or running, keep polling until they finish. If a check then fails, treat it as a failing check in the watch loop. The idle timer does not run while any check is pending, and restarts once checks complete.
 
 ### Poll interval
 
