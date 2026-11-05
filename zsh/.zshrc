@@ -15,9 +15,6 @@ export HOMEBREW_NO_ENV_HINTS=1
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 
-# Volta
-export VOLTA_HOME="$HOME/.volta"
-
 # User configuration
 export LANG=en_US.UTF-8
 

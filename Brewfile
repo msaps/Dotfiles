@@ -11,9 +11,7 @@ brew "lazygit"
 
 # Development
 brew "go"
-brew "volta"
 brew "swiftlint"
-brew "vapor"
 brew "xcodes"
 
 # Docker
