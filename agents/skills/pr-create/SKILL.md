@@ -1,6 +1,6 @@
 ---
 name: pr-create
-description: Create a GitHub pull request from the current feature branch, with a complete branch-level summary and optional squash auto-merge. Use when the user asks to open or create a PR.
+description: Create a GitHub pull request from the current feature branch, with a complete branch-level summary and optional squash auto-merge, then follow up with pr-finalize until the PR is resolved unless told to skip. Use when the user asks to open or create a PR.
 ---
 
 # Create a Pull Request
@@ -81,4 +81,4 @@ Return the PR URL, stop reason, number of `pr-finalize` passes, commits pushed, 
 
 ## Result
 
-Return the PR URL, base branch, title, checks performed, and auto-merge status. If a command fails, return the actionable error instead of guessing.
+Return the PR URL, base branch, title, checks performed, auto-merge status, and finalization status (running in the background, running inline, or skipped). If a command fails, return the actionable error instead of guessing.
